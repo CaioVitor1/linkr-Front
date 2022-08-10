@@ -4,8 +4,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NewPost from "./Pages/NewPost"
 import GlobalStyle from "./styles/GlobalStyle";
 import Timeline from "./Timeline";
-import SignIn from "./Pages/auth/Login";
 import Register from "./Pages/auth/Register";
+import Login from "./Pages/auth/Login";
 
 export default function App() {
 
@@ -15,7 +15,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Timeline />} />
-          <Route path="signin" element={<SignIn />} />;
+          <Route path="signin" element={<Login />} />;
           <Route path="signup" element={<Register />} />;
           <Route path="/newPost" element={<NewPost />} />
         </Routes>

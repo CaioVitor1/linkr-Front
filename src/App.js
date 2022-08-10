@@ -3,8 +3,8 @@ import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import GlobalStyle from "./styles/GlobalStyle";
 import Timeline from "./Timeline";
-import SignIn from "./Pages/auth/Login";
 import Register from "./Pages/auth/Register";
+import Login from "./Pages/auth/Login";
 
 export default function App() {
   return (
@@ -13,7 +13,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Timeline />} />
-          <Route path="signin" element={<SignIn />} />;
+          <Route path="signin" element={<Login />} />;
           <Route path="signup" element={<Register />} />;
         </Routes>
       </BrowserRouter>

@@ -1,23 +1,37 @@
 import { useState, useEffect } from 'react';
 import { ThreeDots } from  'react-loader-spinner';
+import axios from 'axios';
 
 import styled from "styled-components"
 import profile from "../assets/profile.png"
 export default function NewPost() {
     const [url, setUrl] = useState("");
     const [description, setDescription] = useState("");
-    const [loading, setLoading] = useState(false)
-    function addNewPost() {
+    const [loading, setLoading] = useState(false);
+
+    async function addNewPost() {   
         setLoading(true)
+
         let body = {
-            url,
-            description
+            url: url,
+            description: description
         }
         console.log(body)
-        //if sucesso:
-        setUrl("");
-        setDescription("")
-        setLoading(false)
+        const promise = axios.post("http://localhost:4000/newpost", body);
+        promise
+        .then(res =>{
+            setLoading(false)
+            console.log(res.data);
+            setUrl("");
+            setDescription("")
+            
+        })
+        .catch(err => {
+            setLoading(false)
+            console.log(err);
+            alert("Houve erro ao publicar o seu link")
+        })
+        
     }
 
     return (
@@ -27,17 +41,23 @@ export default function NewPost() {
                 <Title>
                     <h2> What are you going to share today?</h2>
                 </Title>
-                <input type="text" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="http://.." />
-                <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Awesome article about #javascript" />
-               {(loading === false) && (<button type='submit' onClick={addNewPost}> Publish</button>)} 
-               {(loading === true) && (<button disabled opacity={0.7} type='submit'>{<ThreeDots  width={51} color={"#ffffff"} />} Publishing... </button>)} 
+                {(loading === false) && (<>
+                    <input type="text" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="http://.." />
+                    <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Awesome article about #javascript" />
+                    <Hability type='submit' onClick={addNewPost}> Publish</Hability>
+                </>)}
+                {(loading === true) && (<>
+                    <input disabled type="text" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="http://.." />
+                    <input disabled type="text" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Awesome article about #javascript" />
+                    <Desability color={'#000000'} opacity={0.7} disabled> Publishing...</Desability>
+                </>)}
+                
            </InputNewPost> 
            
             
         </NewPostBody>
     )
 }
-
 
 const NewPostBody = styled.div`
 padding: 20px;
@@ -78,7 +98,21 @@ margin-left:20px;
     input:last-child{
     height: 60px;
 }
-    button{
+
+
+`
+const Title = styled.div` 
+margin-bottom: 10px;
+font-family: 'Lato';
+font-style: normal;
+font-weight: 300;
+font-size: 20px;
+line-height: 24px;
+color: #707070;
+
+`
+
+const Hability = styled.button`
         width: 112px;
         height: 31px;
         left: 892px;
@@ -95,19 +129,22 @@ margin-left:20px;
         justify-content: center;
         align-items: center;
         margin-left: 390px;
-
-    }
-
-
 `
-const Title = styled.div` 
-margin-bottom: 10px;
-font-family: 'Lato';
-font-style: normal;
-font-weight: 300;
-font-size: 20px;
-line-height: 24px;
-color: #707070;
-
+const Desability = styled.button`
+        width: 112px;
+        height: 31px;
+        left: 892px;
+        top: 419px;
+        background: gray;
+        border-radius: 5px;
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 17px;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 390px;
 `
-

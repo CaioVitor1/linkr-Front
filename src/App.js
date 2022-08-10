@@ -6,19 +6,25 @@ import GlobalStyle from "./styles/GlobalStyle";
 import Timeline from "./Pages/home/Timeline";
 import Register from "./Pages/auth/Register";
 import Login from "./Pages/auth/Login";
+import UserContext from "./contexts/UserContext";
 
 export default function App() {
+  const [token, setToken] = useState("");
+  const contextValue = { token, setToken };
+
   return (
     <>
       <GlobalStyle />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />;
-          <Route path="signup" element={<Register />} />;
-          <Route path="/timeline" element={<Timeline />} />
-          <Route path="/newPost" element={<NewPost />} />
-        </Routes>
-      </BrowserRouter>
+      <UserContext.Provider value={contextValue}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Login />} />;
+            <Route path="signup" element={<Register />} />;
+            <Route path="/timeline" element={<Timeline />} />
+            <Route path="/newPost" element={<NewPost />} />
+          </Routes>
+        </BrowserRouter>
+      </UserContext.Provider>
     </>
   );
 }

@@ -9,14 +9,17 @@ import {
   AuthButton,
   GoTo,
 } from "../../components/authComponents";
-import { useState } from "react";
+
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
+import UserContext from "../../contexts/UserContext";
 
 import axios from "axios";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { setToken } = useContext(UserContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,6 +39,7 @@ export default function Login() {
     try {
       const promise = await axios.post("http://localhost:4000/signin", body);
       console.log(promise.data);
+      setToken(promise.data.token);
       setDisable(true);
       setLoader(<ThreeDots color="white" />);
       navigate("/");

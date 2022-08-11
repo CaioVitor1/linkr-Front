@@ -3,8 +3,11 @@ import profile from "../../assets/profile.png";
 import vector from "../../assets/vector.svg";
 import vector2 from "../../assets/vector2.svg";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Timeline() {
+  const navigate = useNavigate();
+
   const [isOpen, setIsOpen] = useState(vector);
   const [classMenu, setClassMenu] = useState("menu");
 
@@ -23,6 +26,7 @@ export default function Timeline() {
         <h1>Linkr</h1>
         <Logout>
           <img
+            draggable={false}
             onClick={toggleOpen}
             width={25}
             height={25}
@@ -30,6 +34,7 @@ export default function Timeline() {
             alt=""
           />
           <img
+            draggable={false}
             onClick={toggleOpen}
             width={53}
             height={53}
@@ -37,7 +42,9 @@ export default function Timeline() {
             alt=""
           />
           <div className={classMenu}>
-            <p> {classMenu === "menu" ? "" : "Logout"} </p>
+            <p onClick={() => navigate("/")}>
+              {classMenu === "menu" ? "" : "Logout"}
+            </p>
           </div>
         </Logout>
       </Header>

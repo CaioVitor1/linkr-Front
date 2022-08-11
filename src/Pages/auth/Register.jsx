@@ -43,7 +43,7 @@ export default function Register() {
       console.log(promise.data);
       setDisable(true);
       setLoader(<ThreeDots color="white" />);
-      navigate("/signin");
+      navigate("/");
     } catch (error) {
       if (error.response.data[0].includes("image")) {
         setLoader(<ThreeDots color="white" />);

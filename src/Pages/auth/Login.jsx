@@ -42,7 +42,7 @@ export default function Login() {
       setToken(promise.data.token);
       setDisable(true);
       setLoader(<ThreeDots color="white" />);
-      navigate("/");
+      navigate("/timeline");
     } catch (error) {
       console.log(error.response.status);
       setLoader(<ThreeDots color="white" />);

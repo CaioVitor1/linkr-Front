@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Trending(){
 
     const [listTrendingData, setListTrendingData] = useState([]);
+    const navigate = useNavigate();
 
     
     useEffect(() => {
@@ -29,9 +31,12 @@ export default function Trending(){
         }catch(error){
             console.log(error);
         }
+    }
 
+    function clickHashtag(hashtag){
+        const hashtagName = hashtag.substring(1);
 
-
+        navigate(`/hashtagPosts/${hashtagName}`);
     }
 
     return(
@@ -39,7 +44,7 @@ export default function Trending(){
             <span>trending</span>
             <hr />
             <TrendingRanking>
-                {listTrendingData.map((hashtag, index) => <p key={index}>{hashtag.hashtag}</p>)}
+                {listTrendingData.map((hashtag, index) => <p onClick={() => clickHashtag(hashtag.hashtag)} key={index}>{hashtag.hashtag}</p>)}
             </TrendingRanking>
         </TrendingContainer>
     );
@@ -84,5 +89,7 @@ const TrendingRanking = styled.div`
         letter-spacing: 0.05em;
         text-align: left;
         color: #FFFFFF;
+
+        cursor: pointer;
     }
 `

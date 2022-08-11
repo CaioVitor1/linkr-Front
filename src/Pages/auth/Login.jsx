@@ -40,6 +40,8 @@ export default function Login() {
       const promise = await axios.post("http://localhost:4000/signin", body);
       console.log(promise.data);
       setToken(promise.data.token);
+      localStorage.setItem("token", promise.data.token);
+
       setDisable(true);
       setLoader(<ThreeDots color="white" />);
       navigate("/timeline");

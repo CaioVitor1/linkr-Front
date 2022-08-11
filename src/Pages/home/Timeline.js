@@ -11,6 +11,10 @@ export default function Timeline() {
   const [isOpen, setIsOpen] = useState(vector);
   const [classMenu, setClassMenu] = useState("menu");
 
+  const LocalToken = localStorage.getItem("token");
+
+  console.log(LocalToken);
+
   const toggleOpen = () => {
     setIsOpen(isOpen === vector ? vector2 : vector);
     setClassMenu(classMenu === "menu" ? "open-menu" : "menu");
@@ -42,7 +46,12 @@ export default function Timeline() {
             alt=""
           />
           <div className={classMenu}>
-            <p onClick={() => navigate("/")}>
+            <p
+              onClick={() => {
+                navigate("/");
+                localStorage.removeItem("token");
+              }}
+            >
               {classMenu === "menu" ? "" : "Logout"}
             </p>
           </div>

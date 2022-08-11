@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import profile from "../../assets/profile.png";
 import vector from "../../assets/vector.svg";
 import vector2 from "../../assets/vector2.svg";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import jwt from "jwt-decode";
 
 export default function Timeline() {
   const navigate = useNavigate();
@@ -11,9 +11,8 @@ export default function Timeline() {
   const [isOpen, setIsOpen] = useState(vector);
   const [classMenu, setClassMenu] = useState("menu");
 
-  const LocalToken = localStorage.getItem("token");
-
-  console.log(LocalToken);
+  const localToken = localStorage.getItem("token");
+  const userData = jwt(localToken);
 
   const toggleOpen = () => {
     setIsOpen(isOpen === vector ? vector2 : vector);
@@ -37,12 +36,12 @@ export default function Timeline() {
             src={isOpen}
             alt=""
           />
-          <img
+          <Profile
             draggable={false}
             onClick={toggleOpen}
             width={53}
             height={53}
-            src={profile}
+            src={userData.image}
             alt=""
           />
           <div className={classMenu}>
@@ -122,6 +121,11 @@ const Logout = styled.section`
     }
   }
 `;
+
+const Profile = styled.img`
+  border-radius: 26.5px;
+`;
+
 const Container = styled.div`
   height: 100vh;
   background-color: #333333;

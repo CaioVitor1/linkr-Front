@@ -124,7 +124,7 @@ export default function Register() {
           <AuthButton disabled={disable} type="submit">
             {loader}
           </AuthButton>
-          <GoTo onClick={() => navigate("/signin")}>Switch back to log in</GoTo>
+          <GoTo onClick={() => navigate("/")}>Switch back to log in</GoTo>
         </Form>
       </AuthInputs>
     </AuthScreen>

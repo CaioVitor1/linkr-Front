@@ -43,7 +43,7 @@ export default function Register() {
       console.log(promise.data);
       setDisable(true);
       setLoader(<ThreeDots color="white" />);
-      navigate("/signin");
+      navigate("/");
     } catch (error) {
       if (error.response.data[0].includes("image")) {
         setLoader(<ThreeDots color="white" />);
@@ -124,7 +124,7 @@ export default function Register() {
           <AuthButton disabled={disable} type="submit">
             {loader}
           </AuthButton>
-          <GoTo onClick={() => navigate("/signin")}>Switch back to log in</GoTo>
+          <GoTo onClick={() => navigate("/")}>Switch back to log in</GoTo>
         </Form>
       </AuthInputs>
     </AuthScreen>

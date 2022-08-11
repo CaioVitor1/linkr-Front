@@ -11,7 +11,10 @@ export default function Timeline() {
   const toggleOpen = () => {
     setIsOpen(isOpen === vector ? vector2 : vector);
     setClassMenu(classMenu === "menu" ? "open-menu" : "menu");
-    console.log(classMenu);
+  };
+  const justClose = () => {
+    setIsOpen(vector);
+    setClassMenu("menu");
   };
 
   return (
@@ -38,7 +41,7 @@ export default function Timeline() {
           </div>
         </Logout>
       </Header>
-      <Container></Container>
+      <Container onClick={justClose}></Container>
     </>
   );
 }

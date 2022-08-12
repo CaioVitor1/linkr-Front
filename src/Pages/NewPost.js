@@ -80,7 +80,7 @@ export default function NewPost({posts, setPosts}) {
 }
 
 const TimelineTitle = styled.div`
-
+width: 45%;
 font-family: 'Oswald';
 font-style: normal;
 font-weight: 700;
@@ -125,11 +125,13 @@ margin-left:20px;
     font-size: 15px;
     line-height: 18px;
     color: #949494;
+    margin-top: 5px;
 }
 `
 
 const InputsView = styled.div`
     width: 100%;
+    margin-top: 5px;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -160,10 +162,11 @@ const Hability = styled.button`
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-left: 390px;
+        align-self: flex-end;
+        margin-top: 5px;
 `
 const Desability = styled.button`
-        width: 112px;
+        width: 30%;
         height: 31px;
         background: gray;
         border-radius: 5px;
@@ -176,5 +179,6 @@ const Desability = styled.button`
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-left: 390px;
+        align-self: flex-end;
+        margin-top: 5px;
 `

@@ -29,7 +29,7 @@ function RenderPosts({name, url, image, profile, description, comment, title}) {
     )
 }
 
-export default function Posts({posts, setPosts}) {
+export default function Posts({posts, setPosts, localToken}) {
     
     const [loading, setLoading] = useState(false);
 
@@ -37,12 +37,12 @@ export default function Posts({posts, setPosts}) {
     useEffect(() => {
       
         setLoading(true)
-        const config = ""
-       /* const config = {
+        
+        const config = {
             headers: {
-                Authorization: `Bearer ${user.token}`
+                Authorization: `Bearer ${localToken}`
             }
-        } */
+        } 
         const promise = axios.get("http://localhost:4000/getposts", config)
         promise
         .then(res =>{

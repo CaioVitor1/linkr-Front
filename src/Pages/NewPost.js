@@ -10,9 +10,6 @@ export default function NewPost({posts, setPosts}) {
     const [comment, setComment] = useState("");
     const [loading, setLoading] = useState(false);
 
-    console.log("aqui é o new posts")
-    console.log(posts)
-
     async function addNewPost() {   
         setLoading(true)
 

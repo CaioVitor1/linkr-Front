@@ -61,35 +61,34 @@ export default function NewPost({posts, setPosts, localToken, imageProfile}) {
         })
     }
 
-    return (<TimelineTitle> <h2> Timeline</h2>
-   
+    return (
+        <>
+        <TimelineTitle> <h2> Timeline</h2> </TimelineTitle>
         <NewPostBody>
             <img src={imageProfile} />
            <InputNewPost>
                 <Title>
                     <h2> What are you going to share today?</h2>
                 </Title>
-                {(loading === false) && (<>
+                {(loading === false) && (<InputsView>
                     <input type="text" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="http://.." />
                     <input type="text" value={comment} onChange={(e) => setComment(e.target.value)} placeholder="Awesome article about #javascript" />
                     <Hability type='submit' onClick={addNewPost}> Publish</Hability>
-                </>)}
-                {(loading === true) && (<>
+                </InputsView>)}
+                {(loading === true) && (<InputsView>
                     <input disabled type="text" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="http://.." />
                     <input disabled type="text" value={comment} onChange={(e) => setComment(e.target.value)} placeholder="Awesome article about #javascript" />
                     <Desability color={'#000000'} opacity={0.7} disabled> Publishing...</Desability>
-                </>)}
+                </InputsView>)}
                 
            </InputNewPost> 
-           
-            
         </NewPostBody>
-        </TimelineTitle>
+        </>
     )
 }
 
 const TimelineTitle = styled.div`
-
+width: 45%;
 font-family: 'Oswald';
 font-style: normal;
 font-weight: 700;
@@ -101,8 +100,8 @@ color: #FFFFFF;
 const NewPostBody = styled.div`
 
 padding: 20px;
-width: 611px;
-height: 209px;
+width: 45%;
+height: 30vh;
 background: #FFFFFF;
 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 border-radius: 16px;
@@ -117,12 +116,12 @@ margin-bottom: 30px;
 `
 
 const InputNewPost = styled.div`
-
+width: 100%;
 margin-left:20px;
 
     input {
     padding:10px;
-    width: 503px;
+    width: 100%;
     height: 30px;
     left: 501px;
     top: 313px;
@@ -134,11 +133,20 @@ margin-left:20px;
     font-size: 15px;
     line-height: 18px;
     color: #949494;
+    margin-top: 5px;
 }
-
-
 `
+
+const InputsView = styled.div`
+    width: 100%;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+`
+
 const Title = styled.div` 
+width: 100%;
 font-family: 'Lato';
 font-style: normal;
 font-weight: 300;
@@ -149,7 +157,7 @@ color: #707070;
 `
 
 const Hability = styled.button`
-        width: 112px;
+        width: 30%;
         height: 31px;
         background: #1877F2;
         border-radius: 5px;
@@ -162,10 +170,11 @@ const Hability = styled.button`
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-left: 390px;
+        align-self: flex-end;
+        margin-top: 5px;
 `
 const Desability = styled.button`
-        width: 112px;
+        width: 30%;
         height: 31px;
         background: gray;
         border-radius: 5px;
@@ -178,5 +187,6 @@ const Desability = styled.button`
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-left: 390px;
+        align-self: flex-end;
+        margin-top: 5px;
 `

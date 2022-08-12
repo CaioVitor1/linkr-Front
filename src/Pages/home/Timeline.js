@@ -1,20 +1,30 @@
 import styled from "styled-components";
 import Header from "../../components/Header";
 import jwt from "jwt-decode";
+import NewPost from "../NewPost";
+import Posts from "../Posts";
+import { useState, useEffect } from 'react';
+
 
 export default function Timeline() {
   const localToken = localStorage.getItem("token");
   const userData = jwt(localToken);
+  const [posts, setPosts] = useState([]);
 
   return (
     <>
       <Header />
-      <Container></Container>
+      <Container>
+        <NewPost posts={posts} setPosts={setPosts} />
+        <Posts posts={posts} setPosts={setPosts} />
+      </Container>
     </>
   );
 }
 
 const Container = styled.div`
-  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-color: #333333;
 `;

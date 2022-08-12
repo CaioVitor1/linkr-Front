@@ -79,6 +79,7 @@ export default function NewPost({posts, setPosts}) {
 }
 
 const NewPostBody = styled.div`
+margin-top: 200px;
 padding: 20px;
 width: 611px;
 height: 209px;

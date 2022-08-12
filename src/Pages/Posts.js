@@ -29,8 +29,8 @@ function RenderPosts({name, url, image, profile, description, comment, title}) {
     )
 }
 
-export default function Posts() {
-    const [posts, setPosts] = useState([]);
+export default function Posts({posts, setPosts}) {
+    
     const [loading, setLoading] = useState(false);
 
   
@@ -62,7 +62,7 @@ export default function Posts() {
 
     return(
         <>
-        <NewPost posts={posts} setPosts={setPosts} />
+        
         {(loading === false) && (posts.length === 0) && (<NoPosts>There are no posts Yet</NoPosts>)}
         {(loading === true) && (<NoPosts>LOADING...</NoPosts>)}
         {(loading === false) && (posts.length !== 0) && (posts.length !== 0) && (

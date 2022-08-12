@@ -36,7 +36,7 @@ export default function Trending(){
     function clickHashtag(hashtag){
         const hashtagName = hashtag.substring(1);
 
-        navigate(`/hashtagPosts/${hashtagName}`);
+        navigate(`/hashtag/${hashtagName}`);
     }
 
     return(

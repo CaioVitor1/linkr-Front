@@ -10,7 +10,7 @@ export default function Timeline() {
   const localToken = localStorage.getItem("token");
   const userData = jwt(localToken);
   const [posts, setPosts] = useState([]);
-
+  
   return (
     <>
       <Header />

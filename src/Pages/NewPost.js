@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { ThreeDots } from  'react-loader-spinner';
 import axios from 'axios';
-
 import styled from "styled-components"
-import profile from "../assets/profile.png";
 
-export default function NewPost({posts, setPosts}) {
+
+export default function NewPost({posts, setPosts, localToken, imageProfile}) {
     const [url, setUrl] = useState("");
     const [comment, setComment] = useState("");
     const [loading, setLoading] = useState(false);
@@ -18,7 +17,12 @@ export default function NewPost({posts, setPosts}) {
             comment: comment
         }
         console.log(body)
-        const promise = axios.post("http://localhost:4000/newpost", body);
+        const config = {
+            headers: {
+                Authorization: `Bearer ${localToken}`
+            }
+        }
+        const promise = axios.post("http://localhost:4000/newpost", body, config);
         promise
         .then(res =>{
             setLoading(false)
@@ -36,7 +40,11 @@ export default function NewPost({posts, setPosts}) {
     }
 
     function updatePosts() {
-        const config = ""
+        const config = {
+            headers: {
+                Authorization: `Bearer ${localToken}`
+            }
+        }
         const promise = axios.get("http://localhost:4000/getposts", config)
         promise
         .then(res =>{
@@ -57,7 +65,7 @@ export default function NewPost({posts, setPosts}) {
         <>
         <TimelineTitle> <h2> Timeline</h2> </TimelineTitle>
         <NewPostBody>
-            <img src={profile} />
+            <img src={imageProfile} />
            <InputNewPost>
                 <Title>
                     <h2> What are you going to share today?</h2>

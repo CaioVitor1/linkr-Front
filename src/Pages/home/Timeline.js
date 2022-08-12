@@ -15,8 +15,8 @@ export default function Timeline() {
     <>
       <Header />
       <Container>
-            <NewPost posts={posts} setPosts={setPosts} />
-            <Posts posts={posts} setPosts={setPosts} />
+        <NewPost posts={posts} setPosts={setPosts} localToken={localToken} imageProfile={userData.image}/>
+        <Posts posts={posts} setPosts={setPosts} localToken={localToken}/>
       </Container>
     </>
   );

@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from "styled-components"
-import profile from "../assets/profile.png";
-import imageReact from "../assets/imageReact.png"
 import NewPost from "./NewPost.js"
 
 function RenderPosts({name, url, image, profile, description, comment, title}) {
+    function openLink() {
+        window.open(url)
+    }
     return (
         <PostsBody>
                     <img src={profile} />
@@ -13,7 +14,7 @@ function RenderPosts({name, url, image, profile, description, comment, title}) {
                         <PostUser> {name}</PostUser>
                         <PostSubtitle> {comment}</PostSubtitle>
                         
-                        <PostLink> 
+                        <PostLink onClick={openLink}> 
                             <PostContent>
                                 <h2>{title}</h2>
                                 <h3>{description}</h3>
@@ -29,8 +30,9 @@ function RenderPosts({name, url, image, profile, description, comment, title}) {
 }
 
 export default function Posts() {
-    const [posts, setPosts] = useState(["banana"]);
+    const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(false);
+
   
     useEffect(() => {
       
@@ -52,16 +54,18 @@ export default function Posts() {
         })
         .catch(err => {
             console.log(err);
-            console.log("deu ruim")
+            alert("An error occured while trying to fetch the posts, please refresh the page")
+            setLoading(false);
         })
     }, []) 
    
 
     return(
         <>
-        <NewPost />
-        {(posts.length === 0) && (<h3>There are no posts Yet</h3>)}
-        {(posts.length !== 0) && (
+        <NewPost posts={posts} setPosts={setPosts} />
+        {(loading === false) && (posts.length === 0) && (<NoPosts>There are no posts Yet</NoPosts>)}
+        {(loading === true) && (<NoPosts>LOADING...</NoPosts>)}
+        {(loading === false) && (posts.length !== 0) && (posts.length !== 0) && (
             <>
                 {posts.map((data) => <RenderPosts name={data.name}  url={data.url} image={data.image} profile={data.profile} comment={data.comment} title={data.title} description={data.description} />)}    
             </>
@@ -69,6 +73,19 @@ export default function Posts() {
         </>
     )
 }
+
+const NoPosts = styled.div`
+font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-size: 30px;
+line-height: 23px;
+display: flex;
+justify-content: center;
+align-items: center;
+color: black;
+
+`
 
 const PostsBody = styled.div`
 margin-bottom: 20px;
@@ -149,13 +166,8 @@ font-style: normal;
 font-weight: 400;
 font-size: 11px;
 line-height: 13px;
-
 color: #CECECE;
-
-
 }
-
-
 `
 
 const PostImage = styled.div`

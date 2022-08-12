@@ -3,18 +3,22 @@ import { ThreeDots } from  'react-loader-spinner';
 import axios from 'axios';
 
 import styled from "styled-components"
-import profile from "../assets/profile.png"
-export default function NewPost() {
+import profile from "../assets/profile.png";
+
+export default function NewPost({posts, setPosts}) {
     const [url, setUrl] = useState("");
-    const [description, setDescription] = useState("");
+    const [comment, setComment] = useState("");
     const [loading, setLoading] = useState(false);
+
+    console.log("aqui é o new posts")
+    console.log(posts)
 
     async function addNewPost() {   
         setLoading(true)
 
         let body = {
             url: url,
-            description: description
+            comment: comment
         }
         console.log(body)
         const promise = axios.post("http://localhost:4000/newpost", body);
@@ -23,8 +27,8 @@ export default function NewPost() {
             setLoading(false)
             console.log(res.data);
             setUrl("");
-            setDescription("")
-            
+            setComment("")
+            updatePosts()
         })
         .catch(err => {
             setLoading(false)
@@ -32,6 +36,24 @@ export default function NewPost() {
             alert("Houve erro ao publicar o seu link")
         })
         
+    }
+
+    function updatePosts() {
+        const config = ""
+        const promise = axios.get("http://localhost:4000/getposts", config)
+        promise
+        .then(res =>{
+            console.log(res.data);
+            setPosts(res.data)
+            setLoading(false);
+            console.log(posts)
+           
+        })
+        .catch(err => {
+            console.log(err);
+            alert("An error occured while trying to fetch the posts, please refresh the page")
+            setLoading(false);
+        })
     }
 
     return (
@@ -43,12 +65,12 @@ export default function NewPost() {
                 </Title>
                 {(loading === false) && (<>
                     <input type="text" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="http://.." />
-                    <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Awesome article about #javascript" />
+                    <input type="text" value={comment} onChange={(e) => setComment(e.target.value)} placeholder="Awesome article about #javascript" />
                     <Hability type='submit' onClick={addNewPost}> Publish</Hability>
                 </>)}
                 {(loading === true) && (<>
                     <input disabled type="text" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="http://.." />
-                    <input disabled type="text" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Awesome article about #javascript" />
+                    <input disabled type="text" value={comment} onChange={(e) => setComment(e.target.value)} placeholder="Awesome article about #javascript" />
                     <Desability color={'#000000'} opacity={0.7} disabled> Publishing...</Desability>
                 </>)}
                 

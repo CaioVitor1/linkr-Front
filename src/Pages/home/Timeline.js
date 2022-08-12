@@ -15,16 +15,19 @@ export default function Timeline() {
     <>
       <Header />
       <Container>
-        <NewPost posts={posts} setPosts={setPosts} />
-        <Posts posts={posts} setPosts={setPosts} />
+            <NewPost posts={posts} setPosts={setPosts} />
+            <Posts posts={posts} setPosts={setPosts} />
       </Container>
     </>
   );
 }
 
 const Container = styled.div`
+  width: 100%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: #333333;
 `;
+

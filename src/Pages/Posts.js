@@ -25,7 +25,7 @@ function RenderPosts({name, url, image, profile, description, comment, title}) {
                             </PostImage>
                         </PostLink>
                     </PostDescription>
-                </PostsBody>
+        </PostsBody>
     )
 }
 
@@ -90,8 +90,8 @@ color: black;
 const PostsBody = styled.div`
 margin-bottom: 20px;
 padding: 20px;
-width: 611px;
-height: 276px;
+width: 45%;
+height: 40vh;
 background: #171717;
 border-radius: 16px;
 display: flex;

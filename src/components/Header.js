@@ -4,6 +4,7 @@ import vector2 from "../assets/vector2.svg";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import jwt from "jwt-decode";
+import SearchBar from "./SearchBar";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function Header() {
   return (
     <HeaderProfile>
       <h1>Linkr</h1>
+      <SearchBar />
       <Logout>
         <img
           draggable={false}

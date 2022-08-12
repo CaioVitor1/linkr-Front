@@ -53,7 +53,8 @@ export default function NewPost({posts, setPosts}) {
         })
     }
 
-    return (
+    return (<TimelineTitle> <h2> Timeline</h2>
+   
         <NewPostBody>
             <img src={profile} />
            <InputNewPost>
@@ -75,11 +76,22 @@ export default function NewPost({posts, setPosts}) {
            
             
         </NewPostBody>
+        </TimelineTitle>
     )
 }
 
+const TimelineTitle = styled.div`
+
+font-family: 'Oswald';
+font-style: normal;
+font-weight: 700;
+font-size: 43px;
+line-height: 64px;
+color: #FFFFFF;
+`
+
 const NewPostBody = styled.div`
-margin-top: 200px;
+
 padding: 20px;
 width: 611px;
 height: 209px;
@@ -108,7 +120,6 @@ margin-left:20px;
     top: 313px;
     background: #EFEFEF;
     border-radius: 5px;
-    margin-bottom: 10px;
     font-family: 'Lato';
     font-style: normal;
     font-weight: 300;
@@ -116,14 +127,10 @@ margin-left:20px;
     line-height: 18px;
     color: #949494;
 }
-    input:last-child{
-    height: 60px;
-}
 
 
 `
 const Title = styled.div` 
-margin-bottom: 10px;
 font-family: 'Lato';
 font-style: normal;
 font-weight: 300;
@@ -136,8 +143,6 @@ color: #707070;
 const Hability = styled.button`
         width: 112px;
         height: 31px;
-        left: 892px;
-        top: 419px;
         background: #1877F2;
         border-radius: 5px;
         font-family: 'Lato';
@@ -154,8 +159,6 @@ const Hability = styled.button`
 const Desability = styled.button`
         width: 112px;
         height: 31px;
-        left: 892px;
-        top: 419px;
         background: gray;
         border-radius: 5px;
         font-family: 'Lato';

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import styled from "styled-components"
 import NewPost from "./NewPost.js"
@@ -8,6 +8,10 @@ import Modal from 'react-modal';
 
 function RenderPosts({name, userId, idUser, url, image, profile, description, comment, title, token, postid, setPosts}) {
     const [modalIsOpen, setIsOpen] = useState(false);
+    const [edition, setEdition] = useState(false);
+    const [updateComment, setUpdateComment] = useState(comment);
+    const [loadingEdit, setLoadingEdit] = useState(false)
+    let inputComment = useRef();
     
     Modal.setAppElement('.root');
     function openLink() {
@@ -58,6 +62,49 @@ function RenderPosts({name, userId, idUser, url, image, profile, description, co
             alert("Houve erro ao deletar seu link")
         })
     }
+    
+    function editPost(e){
+        setEdition(true);
+        if(e.key === "Escape") {
+            setEdition(false)
+        } if(e.key === "Enter" && updateComment !== comment) {
+            setLoadingEdit(true)
+            console.log("apertaram o Enter");
+
+            let body = {
+                updateComment: updateComment,
+                url: url
+            }
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            const promise = axios.put("http://localhost:4000/updateposts", body, config)
+            promise
+            .then(res =>{
+                setLoadingEdit(false)
+                updatePosts()
+                setEdition(false)
+                console.log(res.data)
+               
+               
+            })
+            .catch(err => {
+                console.log(err);
+                setLoadingEdit(false)
+                alert("An error occurred while trying to update the comment. Try again!An error occured while trying to fetch the posts, please refresh the page")
+               
+            })
+        } 
+        if(e.key === "Enter" && updateComment === comment){
+            console.log("O texto não foi alterado")
+            setEdition(false)
+    }
+}
+
+      
+
     return (
         <PostsBody>
             <Modal
@@ -83,14 +130,14 @@ function RenderPosts({name, userId, idUser, url, image, profile, description, co
                                 <PostUser> {name}</PostUser>
                             </Left>
                             {(idUser === userId) && (<Rigth>
-                                <img src={edit} />
+                                <img onClick={editPost} src={edit} />
                                 <img onClick={openModal} src={trash} />
                             </Rigth>)}
                             
                         </HeaderPost>
-                        
-                        <PostSubtitle> {comment}</PostSubtitle>
-                        
+                        {(edition === false) && (<PostSubtitle> {comment}</PostSubtitle>)}
+                        {(edition === true) && (loadingEdit === false) && (<PostInput> <input autoFocus type='text' ref={inputComment} onKeyDown={editPost} value={updateComment} onChange={(e) => setUpdateComment(e.target.value)}/> </PostInput>)}
+                        {(edition === true) && (loadingEdit === true) && (<PostInput> <input disabled value={updateComment} type='text' /> </PostInput>)}
                         <PostLink onClick={openLink}> 
                             <PostContent>
                                 <h2>{title}</h2>
@@ -107,9 +154,8 @@ function RenderPosts({name, userId, idUser, url, image, profile, description, co
 }
 
 export default function Posts({posts, setPosts, localToken, idUser}) {
-    
-    const [loading, setLoading] = useState(false);
 
+    const [loading, setLoading] = useState(false);
   
     useEffect(() => {
       
@@ -339,4 +385,14 @@ display: flex;
 justify-content: center;
 align-items: center;
 margin-top: 30px;
+`
+
+const PostInput = styled.div`
+
+input {
+width: 100%;
+margin-bottom: 10px;
+background: #FFFFFF;
+border-radius: 7px; 
+}
 `

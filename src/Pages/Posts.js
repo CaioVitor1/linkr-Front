@@ -2,16 +2,93 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from "styled-components"
 import NewPost from "./NewPost.js"
+import trash from "../assets/trash.png";
+import edit from "../assets/edit.png";
+import Modal from 'react-modal';
 
-function RenderPosts({name, url, image, profile, description, comment, title}) {
+function RenderPosts({name, userId, idUser, url, image, profile, description, comment, title, token, postid, setPosts}) {
+    const [modalIsOpen, setIsOpen] = useState(false);
+    
+    Modal.setAppElement('.root');
     function openLink() {
         window.open(url)
     }
+
+    function openModal() {
+        setIsOpen(true);
+    }
+    function closeModal(){
+        setIsOpen(false)
+    }
+    function updatePosts() {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+        const promise = axios.get("http://localhost:4000/getposts", config)
+        promise
+        .then(res =>{
+            setPosts(res.data)
+            
+           
+        })
+        .catch(err => {
+            console.log(err);
+            alert("An error occured while trying to fetch the posts, please refresh the page")
+            
+        })
+    }
+    function deletePost() {
+        
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+        const promise = axios.delete(`http://localhost:4000/deletepost/${postid}`, config);
+        promise
+        .then(res =>{
+            updatePosts()
+            setIsOpen(false)
+        })
+        .catch(err => {
+            setIsOpen(false)
+            console.log(err);
+            alert("Houve erro ao deletar seu link")
+        })
+    }
     return (
         <PostsBody>
+            <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={closeModal}
+            style={ModalStyle}
+            >
+                <ModalStyle>
+                    <h2>Are you sure you want to delete this post?</h2>
+                    <ButtonsModal>
+                        <Back onClick={closeModal}> No, go back</Back>
+                        <Confirm onClick={deletePost}> Yes, delete it</Confirm>
+                    </ButtonsModal>
+                   
+                </ModalStyle>
+               
+
+            </Modal>
                     <img src={profile} />
                     <PostDescription>
-                        <PostUser> {name}</PostUser>
+                        <HeaderPost>
+                            <Left>
+                                <PostUser> {name}</PostUser>
+                            </Left>
+                            {(idUser === userId) && (<Rigth>
+                                <img src={edit} />
+                                <img onClick={openModal} src={trash} />
+                            </Rigth>)}
+                            
+                        </HeaderPost>
+                        
                         <PostSubtitle> {comment}</PostSubtitle>
                         
                         <PostLink onClick={openLink}> 
@@ -29,7 +106,7 @@ function RenderPosts({name, url, image, profile, description, comment, title}) {
     )
 }
 
-export default function Posts({posts, setPosts, localToken}) {
+export default function Posts({posts, setPosts, localToken, idUser}) {
     
     const [loading, setLoading] = useState(false);
 
@@ -46,10 +123,10 @@ export default function Posts({posts, setPosts, localToken}) {
         const promise = axios.get("http://localhost:4000/getposts", config)
         promise
         .then(res =>{
-            console.log(res.data);
+            
             setPosts(res.data)
             setLoading(false);
-            console.log(posts)
+            
            
         })
         .catch(err => {
@@ -67,7 +144,7 @@ export default function Posts({posts, setPosts, localToken}) {
         {(loading === true) && (<NoPosts>LOADING...</NoPosts>)}
         {(loading === false) && (posts.length !== 0) && (posts.length !== 0) && (
             <>
-                {posts.map((data) => <RenderPosts name={data.name}  url={data.url} image={data.image} profile={data.profile} comment={data.comment} title={data.title} description={data.description} />)}    
+                {posts.map((data) => <RenderPosts idUser={idUser} userId={data.id} setPosts={setPosts} token={localToken} postid={data.postid} name={data.name}  url={data.url} image={data.image} profile={data.profile} comment={data.comment} title={data.title} description={data.description} />)}    
             </>
             )}
         </>
@@ -83,7 +160,8 @@ line-height: 23px;
 display: flex;
 justify-content: center;
 align-items: center;
-color: black;
+color: White;
+margin-bottom: 40px;
 
 `
 
@@ -176,10 +254,92 @@ color: #CECECE;
 const PostImage = styled.div`
 width: 40%;
 border-radius: 0px 12px 13px 0px;
-
 img{
+    width: 153.44px;
+    height: 155px;
+}
+`
+
+const HeaderPost = styled.div`
+display:flex;
+justify-content: space-between;
+`
+const Left = styled.div`
+
+`
+
+const Rigth = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+img{
+    margin-right: 10px;
+    width: 14px;
+    height:14px;
     width: 100%;
     height: 100%;
     object-fit: fill;
+
 }
+`
+const ModalStyle = styled.div`
+margin-top:150px;
+margin-left: 70px;
+width: 597px;
+height: 262px;
+background: #333333;
+border-radius: 50px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+h2{
+    font-family: 'Lato';
+font-style: normal;
+font-weight: 700;
+font-size: 34px;
+line-height: 41px;
+text-align: center;
+color: #FFFFFF;
+}
+`
+
+const Back = styled.div`
+width: 134px;
+height: 37px;
+background: #FFFFFF;
+border-radius: 5px;
+font-family: 'Lato';
+font-style: normal;
+font-weight: 700;
+font-size: 18px;
+line-height: 22px;
+color: #1877F2;
+margin-right: 20px;
+display: flex;
+justify-content: center;
+align-items: center;
+`
+
+const Confirm = styled.div`
+width: 134px;
+height: 37px;
+background: #1877F2;
+border-radius: 5px;
+font-family: 'Lato';
+font-style: normal;
+font-weight: 700;
+font-size: 18px;
+line-height: 22px;
+color: #FFFFFF;
+display: flex;
+justify-content: center;
+align-items: center;
+`
+
+const ButtonsModal = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+margin-top: 30px;
 `

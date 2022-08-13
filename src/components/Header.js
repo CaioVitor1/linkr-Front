@@ -60,7 +60,7 @@ const HeaderProfile = styled.header`
   align-items: center;
   padding: 0px 28px;
   width: 100%;
-  height: 72px;
+  height: 10%;
   background-color: #151515;
 
   h1 {

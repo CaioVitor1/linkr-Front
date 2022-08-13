@@ -102,7 +102,7 @@ function RenderPosts({name, userId, idUser, url, image, profile, description, co
                             </PostImage>
                         </PostLink>
                     </PostDescription>
-                </PostsBody>
+        </PostsBody>
     )
 }
 
@@ -168,8 +168,7 @@ margin-bottom: 40px;
 const PostsBody = styled.div`
 margin-bottom: 20px;
 padding: 20px;
-width: 611px;
-height: 276px;
+width: 45%;
 background: #171717;
 border-radius: 16px;
 display: flex;
@@ -183,6 +182,8 @@ display: flex;
 `
 
 const PostDescription = styled.div`
+width: 100%;
+height: 100%;
 margin-left:20px;
 `
 const PostUser = styled.div`
@@ -206,8 +207,8 @@ color: #B7B7B7;
 `
 
 const PostLink = styled.div`
-width: 503px;
-height: 155px;
+width: 100%;
+height: 100%;
 left: 502px;
 top: 596px;
 border: 1px solid #4D4D4D;
@@ -216,8 +217,10 @@ display:flex;
 `
 
 const PostContent = styled.div`
+width: 60%;
 margin-top: 10px;
 margin-left: 10px;
+word-wrap: break-word;
 h2{
 font-family: 'Lato';
 font-style: normal;
@@ -249,12 +252,8 @@ color: #CECECE;
 `
 
 const PostImage = styled.div`
-width: 153.44px;
-height: 155px;
+width: 40%;
 border-radius: 0px 12px 13px 0px;
-width: 153.44px;
-height: 155px;
-
 img{
     width: 153.44px;
     height: 155px;
@@ -262,11 +261,9 @@ img{
 `
 
 const HeaderPost = styled.div`
-
 display:flex;
 justify-content: space-between;
 `
-
 const Left = styled.div`
 
 `
@@ -279,6 +276,10 @@ img{
     margin-right: 10px;
     width: 14px;
     height:14px;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+
 }
 `
 const ModalStyle = styled.div`

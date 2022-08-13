@@ -1,16 +1,38 @@
+
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import styled from "styled-components"
 import NewPost from "./NewPost.js"
 import trash from "../assets/trash.png";
 import edit from "../assets/edit.png";
-import Modal from 'react-modal';
+import heart from "../assets/heart.svg";
+import heartLiked from "../assets/heartLiked.svg";
+import Modal from "react-modal";
 
-function RenderPosts({name, userId, idUser, url, image, profile, description, comment, title, token, postid, setPosts}) {
+function RenderPosts({
+  name,
+  userId,
+  idUser,
+  url,
+  image,
+  profile,
+  description,
+  comment,
+  title,
+  token,
+  postid,
+  setPosts,
+}) {
     const [modalIsOpen, setIsOpen] = useState(false);
     const [edition, setEdition] = useState(false);
     const [updateComment, setUpdateComment] = useState(comment);
     const [loadingEdit, setLoadingEdit] = useState(false)
+   
+    const [isLiked, setIsLiked] = useState(heart);
+  const toggleLike = () => {
+    setIsLiked(isLiked === heart ? heartLiked : heart);
+  };
+    
     let inputComment = useRef();
     
     Modal.setAppElement('.root');
@@ -123,7 +145,17 @@ function RenderPosts({name, userId, idUser, url, image, profile, description, co
                
 
             </Modal>
-                    <img src={profile} />
+                   <PostInfo>
+                      <Profile src={profile} />
+                      <Likes
+                        onClick={toggleLike}
+                        width={20}
+                        height={18}
+                        src={isLiked}
+                        alt=""
+                      />
+                      <p>13 likes</p>
+                    </PostInfo>
                     <PostDescription>
                         <HeaderPost>
                             <Left>
@@ -183,212 +215,218 @@ export default function Posts({posts, setPosts, localToken, idUser}) {
     }, []) 
    
 
-    return(
+
+
+  return (
+    <>
+      {loading === false && posts.length === 0 && (
+        <NoPosts>There are no posts Yet</NoPosts>
+      )}
+      {loading === true && <NoPosts>LOADING...</NoPosts>}
+      {loading === false && posts.length !== 0 && posts.length !== 0 && (
         <>
-        
-        {(loading === false) && (posts.length === 0) && (<NoPosts>There are no posts Yet</NoPosts>)}
-        {(loading === true) && (<NoPosts>LOADING...</NoPosts>)}
-        {(loading === false) && (posts.length !== 0) && (posts.length !== 0) && (
-            <>
-                {posts.map((data) => <RenderPosts idUser={idUser} userId={data.id} setPosts={setPosts} token={localToken} postid={data.postid} name={data.name}  url={data.url} image={data.image} profile={data.profile} comment={data.comment} title={data.title} description={data.description} />)}    
-            </>
-            )}
+          {posts.map((data) => (
+            <RenderPosts
+              idUser={idUser}
+              userId={data.id}
+              setPosts={setPosts}
+              token={localToken}
+              postid={data.postid}
+              name={data.name}
+              url={data.url}
+              image={data.image}
+              profile={data.profile}
+              comment={data.comment}
+              title={data.title}
+              description={data.description}
+            />
+          ))}
         </>
-    )
+      )}
+    </>
+  );
 }
 
 const NoPosts = styled.div`
-font-family: 'Lato';
-font-style: normal;
-font-weight: 400;
-font-size: 30px;
-line-height: 23px;
-display: flex;
-justify-content: center;
-align-items: center;
-color: White;
-margin-bottom: 40px;
-
-`
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 23px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: White;
+  margin-bottom: 40px;
+`;
 
 const PostsBody = styled.div`
-margin-bottom: 20px;
-padding: 20px;
-width: 45%;
-background: #171717;
-border-radius: 16px;
-display: flex;
-    img{
-    width: 50px;
-    height: 50px;
-    left: 433px;
-    border-radius: 26.5px;
-}
-
-`
+  margin-bottom: 20px;
+  padding: 20px;
+  width: 45%;
+  background: #171717;
+  border-radius: 16px;
+  display: flex;
+`;
 
 const PostDescription = styled.div`
-width: 100%;
-height: 100%;
-margin-left:20px;
-`
+  width: 100%;
+  height: 100%;
+  margin-left: 20px;
+`;
 const PostUser = styled.div`
-font-family: 'Lato';
-font-style: normal;
-font-weight: 400;
-font-size: 19px;
-line-height: 23px;
-color: #FFFFFF;
-margin-bottom: 10px;
-`
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 19px;
+  line-height: 23px;
+  color: #ffffff;
+  margin-bottom: 10px;
+`;
 
 const PostSubtitle = styled.div`
-font-family: 'Lato';
-font-style: normal;
-font-weight: 400;
-font-size: 17px;
-line-height: 20px;
-margin-bottom: 10px;
-color: #B7B7B7;
-`
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 20px;
+  margin-bottom: 10px;
+  color: #b7b7b7;
+`;
 
 const PostLink = styled.div`
-width: 100%;
-height: 100%;
-left: 502px;
-top: 596px;
-border: 1px solid #4D4D4D;
-border-radius: 11px;
-display:flex;
-`
+  width: 100%;
+  height: 100%;
+  left: 502px;
+  top: 596px;
+  border: 1px solid #4d4d4d;
+  border-radius: 11px;
+  display: flex;
+`;
 
 const PostContent = styled.div`
-width: 60%;
-margin-top: 10px;
-margin-left: 10px;
-word-wrap: break-word;
-h2{
-font-family: 'Lato';
-font-style: normal;
-font-weight: 400;
-font-size: 16px;
-line-height: 19px;
-color: #CECECE;
-margin-top: 10px;
-}
-h3{
-margin-top: 10px;
-font-family: 'Lato';
-font-style: normal;
-font-weight: 400;
-font-size: 11px;
-line-height: 13px;
-color: #9B9595;
-
-}
-h4{
-margin-top: 10px;
-font-family: 'Lato';
-font-style: normal;
-font-weight: 400;
-font-size: 11px;
-line-height: 13px;
-color: #CECECE;
-}
-`
+  width: 60%;
+  margin-top: 10px;
+  margin-left: 10px;
+  word-wrap: break-word;
+  h2 {
+    font-family: "Lato";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #cecece;
+    margin-top: 10px;
+  }
+  h3 {
+    margin-top: 10px;
+    font-family: "Lato";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    color: #9b9595;
+  }
+  h4 {
+    margin-top: 10px;
+    font-family: "Lato";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    color: #cecece;
+  }
+`;
 
 const PostImage = styled.div`
-width: 40%;
-border-radius: 0px 12px 13px 0px;
-img{
+  width: 40%;
+  border-radius: 0px 12px 13px 0px;
+  img {
     width: 153.44px;
     height: 155px;
-}
-`
+  }
+`;
 
 const HeaderPost = styled.div`
-display:flex;
-justify-content: space-between;
-`
-const Left = styled.div`
-
-`
+  display: flex;
+  justify-content: space-between;
+`;
+const Left = styled.div``;
 
 const Rigth = styled.div`
-display: flex;
-justify-content: center;
-align-items: center;
-img{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img {
     margin-right: 10px;
     width: 3vh;
-    height:3vh;
+    height: 3vh;
     object-fit: fill;
-}
-`
+  }
+`;
 const ModalStyle = styled.div`
-margin-top:150px;
-margin-left: 70px;
-width: 597px;
-height: 262px;
-background: #333333;
-border-radius: 50px;
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-h2{
-    font-family: 'Lato';
-font-style: normal;
-font-weight: 700;
-font-size: 34px;
-line-height: 41px;
-text-align: center;
-color: #FFFFFF;
-}
-`
+  margin-top: 150px;
+  margin-left: 70px;
+  width: 597px;
+  height: 262px;
+  background: #333333;
+  border-radius: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h2 {
+    font-family: "Lato";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 34px;
+    line-height: 41px;
+    text-align: center;
+    color: #ffffff;
+  }
+`;
 
 const Back = styled.div`
-width: 134px;
-height: 37px;
-background: #FFFFFF;
-border-radius: 5px;
-font-family: 'Lato';
-font-style: normal;
-font-weight: 700;
-font-size: 18px;
-line-height: 22px;
-color: #1877F2;
-margin-right: 20px;
-display: flex;
-justify-content: center;
-align-items: center;
-`
+  width: 134px;
+  height: 37px;
+  background: #ffffff;
+  border-radius: 5px;
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 22px;
+  color: #1877f2;
+  margin-right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const Confirm = styled.div`
-width: 134px;
-height: 37px;
-background: #1877F2;
-border-radius: 5px;
-font-family: 'Lato';
-font-style: normal;
-font-weight: 700;
-font-size: 18px;
-line-height: 22px;
-color: #FFFFFF;
-display: flex;
-justify-content: center;
-align-items: center;
-`
+  width: 134px;
+  height: 37px;
+  background: #1877f2;
+  border-radius: 5px;
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 22px;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const ButtonsModal = styled.div`
+
 display: flex;
 justify-content: center;
 align-items: center;
 margin-top: 30px;
 `
-
 const PostInput = styled.div`
-
 input {
 width: 100%;
 margin-bottom: 10px;
@@ -396,3 +434,30 @@ background: #FFFFFF;
 border-radius: 7px; 
 }
 `
+
+const PostInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  p {
+    font-family: "Lato";
+    color: #fff;
+    font-size: 11px;
+    font-weight: 400;
+  }
+`;
+
+const Likes = styled.img`
+  margin-top: 19px;
+  margin-bottom: 10px;
+`;
+
+const Profile = styled.img`
+  width: 50px;
+  height: 50px;
+  left: 433px;
+  border-radius: 26.5px;
+`;
+

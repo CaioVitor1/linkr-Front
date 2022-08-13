@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import styled from "styled-components";
-import NewPost from "./NewPost.js";
+
+import { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+import styled from "styled-components"
+import NewPost from "./NewPost.js"
 import trash from "../assets/trash.png";
 import edit from "../assets/edit.png";
 import heart from "../assets/heart.svg";
 import heartLiked from "../assets/heartLiked.svg";
-
 import Modal from "react-modal";
 
 function RenderPosts({
@@ -23,144 +23,199 @@ function RenderPosts({
   postid,
   setPosts,
 }) {
-  const [modalIsOpen, setIsOpen] = useState(false);
-
-  const [isLiked, setIsLiked] = useState(heart);
+    const [modalIsOpen, setIsOpen] = useState(false);
+    const [edition, setEdition] = useState(false);
+    const [updateComment, setUpdateComment] = useState(comment);
+    const [loadingEdit, setLoadingEdit] = useState(false)
+   
+    const [isLiked, setIsLiked] = useState(heart);
   const toggleLike = () => {
     setIsLiked(isLiked === heart ? heartLiked : heart);
   };
+    
+    let inputComment = useRef();
+    
+    Modal.setAppElement('.root');
+    function openLink() {
+        window.open(url)
+    }
 
-  Modal.setAppElement(".root");
-  function openLink() {
-    window.open(url);
-  }
+    function openModal() {
+        setIsOpen(true);
+    }
+    function closeModal(){
+        setIsOpen(false)
+    }
+    function updatePosts() {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+        const promise = axios.get("http://localhost:4000/getposts", config)
+        promise
+        .then(res =>{
+            setPosts(res.data)
+            
+           
+        })
+        .catch(err => {
+            console.log(err);
+            alert("An error occured while trying to fetch the posts, please refresh the page")
+            
+        })
+    }
+    function deletePost() {
+        
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+        const promise = axios.delete(`http://localhost:4000/deletepost/${postid}`, config);
+        promise
+        .then(res =>{
+            updatePosts()
+            setIsOpen(false)
+        })
+        .catch(err => {
+            setIsOpen(false)
+            console.log(err);
+            alert("Houve erro ao deletar seu link")
+        })
+    }
+    
+    function editPost(e){
+        setEdition(true);
+        if(e.key === "Escape") {
+            setEdition(false)
+        } if(e.key === "Enter" && updateComment !== comment) {
+            setLoadingEdit(true)
+            console.log("apertaram o Enter");
 
-  function openModal() {
-    setIsOpen(true);
-  }
-  function closeModal() {
-    setIsOpen(false);
-  }
-  function updatePosts() {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    const promise = axios.get("http://localhost:4000/getposts", config);
-    promise
-      .then((res) => {
-        setPosts(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        alert(
-          "An error occured while trying to fetch the posts, please refresh the page"
-        );
-      });
-  }
-  function deletePost() {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    const promise = axios.delete(
-      `http://localhost:4000/deletepost/${postid}`,
-      config
-    );
-    promise
-      .then((res) => {
-        updatePosts();
-        setIsOpen(false);
-      })
-      .catch((err) => {
-        setIsOpen(false);
-        console.log(err);
-        alert("Houve erro ao deletar seu link");
-      });
-  }
-  return (
-    <PostsBody>
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        style={ModalStyle}
-      >
-        <ModalStyle>
-          <h2>Are you sure you want to delete this post?</h2>
-          <ButtonsModal>
-            <Back onClick={closeModal}> No, go back</Back>
-            <Confirm onClick={deletePost}> Yes, delete it</Confirm>
-          </ButtonsModal>
-        </ModalStyle>
-      </Modal>
-      <PostInfo>
-        <Profile src={profile} />
-        <Likes
-          onClick={toggleLike}
-          width={20}
-          height={18}
-          src={isLiked}
-          alt=""
-        />
-        <p>13 likes</p>
-      </PostInfo>
-      <PostDescription>
-        <HeaderPost>
-          <Left>
-            <PostUser> {name}</PostUser>
-          </Left>
-          {idUser === userId && (
-            <Rigth>
-              <img src={edit} />
-              <img onClick={openModal} src={trash} />
-            </Rigth>
-          )}
-        </HeaderPost>
-
-        <PostSubtitle> {comment}</PostSubtitle>
-
-        <PostLink onClick={openLink}>
-          <PostContent>
-            <h2>{title}</h2>
-            <h3>{description}</h3>
-            <h4>{url}</h4>
-          </PostContent>
-          <PostImage>
-            <img src={image} />
-          </PostImage>
-        </PostLink>
-      </PostDescription>
-    </PostsBody>
-  );
+            let body = {
+                updateComment: updateComment,
+                url: url
+            }
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            const promise = axios.put("http://localhost:4000/updateposts", body, config)
+            promise
+            .then(res =>{
+                setLoadingEdit(false)
+                updatePosts()
+                setEdition(false)
+                console.log(res.data)
+               
+               
+            })
+            .catch(err => {
+                console.log(err);
+                setLoadingEdit(false)
+                alert("An error occurred while trying to update the comment. Try again!An error occured while trying to fetch the posts, please refresh the page")
+               
+            })
+        } 
+        if(e.key === "Enter" && updateComment === comment){
+            console.log("O texto não foi alterado")
+            setEdition(false)
+    }
 }
 
-export default function Posts({ posts, setPosts, localToken, idUser }) {
-  const [loading, setLoading] = useState(false);
+      
 
-  useEffect(() => {
-    setLoading(true);
+    return (
+        <PostsBody>
+            <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={closeModal}
+            style={ModalStyle}
+            >
+                <ModalStyle>
+                    <h2>Are you sure you want to delete this post?</h2>
+                    <ButtonsModal>
+                        <Back onClick={closeModal}> No, go back</Back>
+                        <Confirm onClick={deletePost}> Yes, delete it</Confirm>
+                    </ButtonsModal>
+                   
+                </ModalStyle>
+               
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${localToken}`,
-      },
-    };
-    const promise = axios.get("http://localhost:4000/getposts", config);
-    promise
-      .then((res) => {
-        setPosts(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        alert(
-          "An error occured while trying to fetch the posts, please refresh the page"
-        );
-        setLoading(false);
-      });
-  }, []);
+            </Modal>
+                   <PostInfo>
+                      <Profile src={profile} />
+                      <Likes
+                        onClick={toggleLike}
+                        width={20}
+                        height={18}
+                        src={isLiked}
+                        alt=""
+                      />
+                      <p>13 likes</p>
+                    </PostInfo>
+                    <PostDescription>
+                        <HeaderPost>
+                            <Left>
+                                <PostUser> {name}</PostUser>
+                            </Left>
+                            {(idUser === userId) && (<Rigth>
+                                <img onClick={editPost} src={edit} />
+                                <img onClick={openModal} src={trash} />
+                            </Rigth>)}
+                            
+                        </HeaderPost>
+                        {(edition === false) && (<PostSubtitle> {comment}</PostSubtitle>)}
+                        {(edition === true) && (loadingEdit === false) && (<PostInput> <input autoFocus type='text' ref={inputComment} onKeyDown={editPost} value={updateComment} onChange={(e) => setUpdateComment(e.target.value)}/> </PostInput>)}
+                        {(edition === true) && (loadingEdit === true) && (<PostInput> <input disabled value={updateComment} type='text' /> </PostInput>)}
+                        <PostLink onClick={openLink}> 
+                            <PostContent>
+                                <h2>{title}</h2>
+                                <h3>{description}</h3>
+                                <h4>{url}</h4>
+                            </PostContent>
+                            <PostImage>
+                                <img src={image} />
+                            </PostImage>
+                        </PostLink>
+                    </PostDescription>
+        </PostsBody>
+    )
+}
+
+export default function Posts({posts, setPosts, localToken, idUser}) {
+
+    const [loading, setLoading] = useState(false);
+  
+    useEffect(() => {
+      
+        setLoading(true)
+        
+        const config = {
+            headers: {
+                Authorization: `Bearer ${localToken}`
+            }
+        } 
+        const promise = axios.get("http://localhost:4000/getposts", config)
+        promise
+        .then(res =>{
+            
+            setPosts(res.data)
+            setLoading(false);
+            
+           
+        })
+        .catch(err => {
+            console.log(err);
+            alert("An error occured while trying to fetch the posts, please refresh the page")
+            setLoading(false);
+        })
+    }, []) 
+   
+
+
 
   return (
     <>
@@ -365,11 +420,20 @@ const Confirm = styled.div`
 `;
 
 const ButtonsModal = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 30px;
-`;
+
+display: flex;
+justify-content: center;
+align-items: center;
+margin-top: 30px;
+`
+const PostInput = styled.div`
+input {
+width: 100%;
+margin-bottom: 10px;
+background: #FFFFFF;
+border-radius: 7px; 
+}
+`
 
 const PostInfo = styled.div`
   display: flex;
@@ -396,3 +460,4 @@ const Profile = styled.img`
   left: 433px;
   border-radius: 26.5px;
 `;
+

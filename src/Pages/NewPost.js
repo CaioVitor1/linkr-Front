@@ -16,7 +16,6 @@ export default function NewPost({posts, setPosts, localToken, imageProfile}) {
             url: url,
             comment: comment
         }
-        console.log(body)
         const config = {
             headers: {
                 Authorization: `Bearer ${localToken}`
@@ -26,7 +25,6 @@ export default function NewPost({posts, setPosts, localToken, imageProfile}) {
         promise
         .then(res =>{
             setLoading(false)
-            console.log(res.data);
             setUrl("");
             setComment("")
             updatePosts()
@@ -48,10 +46,9 @@ export default function NewPost({posts, setPosts, localToken, imageProfile}) {
         const promise = axios.get("http://localhost:4000/getposts", config)
         promise
         .then(res =>{
-            console.log(res.data);
             setPosts(res.data)
             setLoading(false);
-            console.log(posts)
+           
            
         })
         .catch(err => {

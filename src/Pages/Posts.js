@@ -6,10 +6,9 @@ import trash from "../assets/trash.png";
 import edit from "../assets/edit.png";
 import Modal from 'react-modal';
 
-function RenderPosts({name, url, image, profile, description, comment, title, token, postid, setPosts}) {
+function RenderPosts({name, userId, idUser, url, image, profile, description, comment, title, token, postid, setPosts}) {
     const [modalIsOpen, setIsOpen] = useState(false);
     
-console.log(token)
     Modal.setAppElement('.root');
     function openLink() {
         window.open(url)
@@ -30,7 +29,6 @@ console.log(token)
         const promise = axios.get("http://localhost:4000/getposts", config)
         promise
         .then(res =>{
-            console.log(res.data);
             setPosts(res.data)
             
            
@@ -42,8 +40,6 @@ console.log(token)
         })
     }
     function deletePost() {
-        console.log("vamos deletar")
-        console.log(postid, token);
         
         const config = {
             headers: {
@@ -53,7 +49,6 @@ console.log(token)
         const promise = axios.delete(`http://localhost:4000/deletepost/${postid}`, config);
         promise
         .then(res =>{
-            console.log(res.data);
             updatePosts()
             setIsOpen(false)
         })
@@ -87,10 +82,10 @@ console.log(token)
                             <Left>
                                 <PostUser> {name}</PostUser>
                             </Left>
-                            <Rigth>
+                            {(idUser === userId) && (<Rigth>
                                 <img src={edit} />
                                 <img onClick={openModal} src={trash} />
-                            </Rigth>
+                            </Rigth>)}
                             
                         </HeaderPost>
                         
@@ -111,7 +106,7 @@ console.log(token)
     )
 }
 
-export default function Posts({posts, setPosts, localToken}) {
+export default function Posts({posts, setPosts, localToken, idUser}) {
     
     const [loading, setLoading] = useState(false);
 
@@ -131,7 +126,7 @@ export default function Posts({posts, setPosts, localToken}) {
             
             setPosts(res.data)
             setLoading(false);
-            console.log(posts)
+            
            
         })
         .catch(err => {
@@ -149,7 +144,7 @@ export default function Posts({posts, setPosts, localToken}) {
         {(loading === true) && (<NoPosts>LOADING...</NoPosts>)}
         {(loading === false) && (posts.length !== 0) && (posts.length !== 0) && (
             <>
-                {posts.map((data) => <RenderPosts setPosts={setPosts} token={localToken} postid={data.postid} name={data.name}  url={data.url} image={data.image} profile={data.profile} comment={data.comment} title={data.title} description={data.description} />)}    
+                {posts.map((data) => <RenderPosts idUser={idUser} userId={data.id} setPosts={setPosts} token={localToken} postid={data.postid} name={data.name}  url={data.url} image={data.image} profile={data.profile} comment={data.comment} title={data.title} description={data.description} />)}    
             </>
             )}
         </>

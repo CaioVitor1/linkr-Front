@@ -10,13 +10,13 @@ export default function Timeline() {
   const localToken = localStorage.getItem("token");
   const userData = jwt(localToken);
   const [posts, setPosts] = useState([]);
-  
+  console.log(userData.id)
   return (
     <>
       <Header />
       <Container>
         <NewPost posts={posts} setPosts={setPosts} localToken={localToken} imageProfile={userData.image}/>
-        <Posts posts={posts} setPosts={setPosts} localToken={localToken}/>
+        <Posts posts={posts} setPosts={setPosts} localToken={localToken} idUser={userData.id}/>
       </Container>
     </>
   );

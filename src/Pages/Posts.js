@@ -274,12 +274,9 @@ justify-content: center;
 align-items: center;
 img{
     margin-right: 10px;
-    width: 14px;
-    height:14px;
-    width: 100%;
-    height: 100%;
+    width: 3vh;
+    height:3vh;
     object-fit: fill;
-
 }
 `
 const ModalStyle = styled.div`

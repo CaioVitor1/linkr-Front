@@ -6,6 +6,7 @@ import GlobalStyle from "./styles/GlobalStyle";
 import Timeline from "./Pages/home/Timeline";
 import Trending from "./Pages/trending/Trending";
 import Register from "./Pages/auth/Register";
+import Posts from "./Pages/Posts";
 import Login from "./Pages/auth/Login";
 import UserContext from "./contexts/UserContext";
 import HashtagPosts from "./Pages/hashtagPosts/HashtagPosts";
@@ -18,6 +19,7 @@ export default function App() {
   return (
     <>
       <GlobalStyle />
+
       <UserContext.Provider value={contextValue}>
         <BrowserRouter>
           <Routes>
@@ -28,6 +30,7 @@ export default function App() {
             <Route path="/user/:userId" element={<UserPosts />} /> 
             <Route path="/timeline" element={<Timeline />} />
             <Route path="/newPost" element={<NewPost />} />
+            <Route path="/posts" element={<Posts />} />
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>

@@ -34,9 +34,9 @@ export default function Trending(){
     }
 
     function clickHashtag(hashtag){
-        const hashtagName = hashtag.substring(1);
+        //const hashtagName = hashtag.substring(1);
 
-        navigate(`/hashtag/${hashtagName}`);
+        navigate(`/hashtag/${hashtag}`);
     }
 
     return(
@@ -52,9 +52,8 @@ export default function Trending(){
 
 
 const TrendingContainer = styled.div`
-    width: 100%;
-    height: 100vw;
-
+    width: 60%;
+    height: 60vh;
     background-color: #171717;
     border-radius: 16px; 
 

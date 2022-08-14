@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from "styled-components"
-import NewPost from "./NewPost.js"
 
-function RenderPosts({name, url, image, profile, description, comment, title}) {
+export default function Post({name, url, image, profile, description, comment, title}) {
     function openLink() {
         window.open(url)
     }
@@ -29,61 +28,6 @@ function RenderPosts({name, url, image, profile, description, comment, title}) {
     )
 }
 
-export default function Posts({posts, setPosts, localToken}) {
-    
-    const [loading, setLoading] = useState(false);
-
-  
-    useEffect(() => {
-      
-        setLoading(true)
-        
-        getPosts();
-    }, []) 
-   
-
-    async function getPosts(){
-        const config = {
-            headers: {
-                Authorization: `Bearer ${localToken}`
-            }
-        }
-
-    
-            const promise = axios.get("http://localhost:4000/getposts", config)
-            promise
-            .then(res =>{
-                console.log(res.data);
-                setPosts(res.data)
-                setLoading(false);
-                console.log(posts)
-               
-            })
-            .catch(err => {
-                console.log(err);
-                alert("An error occured while trying to fetch the posts, please refresh the page")
-                setLoading(false);
-            });
-
-        
-
-    }
-
-    return(
-        <>
-        
-        {(loading === false) && (posts.length === 0) && (<NoPosts>There are no posts Yet</NoPosts>)}
-        {(loading === true) && (<NoPosts>LOADING...</NoPosts>)}
-        {(loading === false) && (posts.length !== 0) && (posts.length !== 0) && (
-            <>
-                {posts.map((data) => <RenderPosts name={data.name}  url={data.url} image={data.image} profile={data.profile} comment={data.comment} title={data.title} description={data.description} />)}    
-            </>
-            )}
-        </>
-    )
-}
-
-
 const NoPosts = styled.div`
 font-family: 'Lato';
 font-style: normal;
@@ -100,7 +44,7 @@ color: black;
 const PostsBody = styled.div`
 margin-bottom: 20px;
 padding: 20px;
-width: 60%;
+width: 45%;
 background: #171717;
 border-radius: 16px;
 display: flex;

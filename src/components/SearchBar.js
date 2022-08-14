@@ -2,7 +2,6 @@ import styled from "styled-components"
 import { DebounceInput } from "react-debounce-input"
 import { useState } from "react"
 import axios from "axios";
-import SelectSearch from "react-select-search";
 
 
 export default function SearchBar(){
@@ -27,7 +26,7 @@ export default function SearchBar(){
 
     return(
     <>
-    <DebounceInput element={() => Select(searchBarResult)}
+    <DebounceInput element={SearchBarInput}
     minLength={3}
     debounceTimeout={300}
     onChange={event => searchUsers(event.target.value)}
@@ -35,16 +34,7 @@ export default function SearchBar(){
     placeholder="Search for people">
     </DebounceInput>
     </>)
-    // return(
-    //     <>
-    //          <SelectSearch 
-    //          value="sv" 
-    //          name="language" 
-    //          placeholder="Choose your language" 
-    //          search={true}
-    //          />
-    //     </>
-    // )
+
 }
 
 

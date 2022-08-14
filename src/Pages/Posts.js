@@ -10,6 +10,9 @@ import heartLiked from "../assets/heartLiked.svg";
 import Modal from "react-modal";
 
 function RenderPosts({
+  likes,
+  likesCount,
+  posts,
   name,
   userId,
   idUser,
@@ -27,11 +30,87 @@ function RenderPosts({
     const [edition, setEdition] = useState(false);
     const [updateComment, setUpdateComment] = useState(comment);
     const [loadingEdit, setLoadingEdit] = useState(false)
+   // heart e heartLiked são as imagens dos corações preenchidos ou não.
+   //UserId: Id de quem escreveu o post; idUser: Id do usuário logado
+    const [imgheart, setImgheart] = useState(heart);
+    const [isliked, setIsliked] = useState(false)
+  
+  function deleteLike() {
+    console.log("chegou aqui")
+    const config = {
+      headers: {
+          Authorization: `Bearer ${token}`
+      }
+  }
+  let body = {
+    idUser: idUser,
+    postid: postid
+  }
+  console.log(body)
+ 
+  const promise = axios.post("http://localhost:4000/deletelikes", body, config)
+  promise
+  .then(res =>{
+      console.log(res.data)
+      updatePosts()
+     
+  })
+  .catch(err => {
+      console.log(err);
+      alert("An error occured while trying to fetch the posts, please refresh the page")
+      
+  })
+  }
+
+  function addLike() {
+    const config = {
+      headers: {
+          Authorization: `Bearer ${token}`
+      }
+  }
+  let body = {
+    idUser: idUser,
+    postid: postid
+  }
+ 
+  const promise = axios.post("http://localhost:4000/addlikes", body, config)
+  promise
+  .then(res =>{
+      console.log(res.data)
+      updatePosts()
+     
+  })
+  .catch(err => {
+      console.log(err);
+      alert("An error occured while trying to fetch the posts, please refresh the page")
+      
+  })
+  }
+
+    function toggleLike() {
+      
+      if(liked === "false") {
+        liked = "true"
+        console.log("mudei pra true")
+        //Acrescenta like
+        console.log(idUser)
+        console.log(postid)
+        addLike()
+        return
+      } 
+
+      if(liked === "true") {
+        liked = "false"
+        console.log("mudei pra false")
+        //remove like
+        deleteLike()
    
-    const [isLiked, setIsLiked] = useState(heart);
-  const toggleLike = () => {
-    setIsLiked(isLiked === heart ? heartLiked : heart);
-  };
+      }
+
+
+     
+    }
+  
     
     let inputComment = useRef();
     
@@ -124,7 +203,26 @@ function RenderPosts({
             setEdition(false)
     }
 }
+let liked = "false"
+function checkLike(likes){
 
+  if(likes.length === 0) {
+    return console.log("ninguém deu like")
+    
+  } 
+    for(let i = 0; i < likes.length; i++) {
+      console.log(likes.length)
+      if(likes[i].userId === idUser){
+         //setIsliked(true)
+         liked = "true"
+       
+      }
+  }
+  
+
+
+
+}
       
 
     return (
@@ -147,14 +245,19 @@ function RenderPosts({
             </Modal>
                    <PostInfo>
                       <Profile src={profile} />
-                      <Likes
-                        onClick={toggleLike}
-                        width={20}
-                        height={18}
-                        src={isLiked}
-                        alt=""
-                      />
-                      <p>13 likes</p>
+
+
+                      <Likes onClick={toggleLike} >
+
+                        {checkLike(likes)}
+                        {(liked === "false") && (<img src={heart} />)}
+                        {(liked === "true") && (<img src={heartLiked} />)}  
+
+                      
+                        </Likes>
+
+
+                      <p>{likesCount} likes</p>
                     </PostInfo>
                     <PostDescription>
                         <HeaderPost>
@@ -201,10 +304,9 @@ export default function Posts({posts, setPosts, localToken, idUser}) {
         const promise = axios.get("http://localhost:4000/getposts", config)
         promise
         .then(res =>{
-            
             setPosts(res.data)
             setLoading(false);
-            
+          
            
         })
         .catch(err => {
@@ -213,7 +315,7 @@ export default function Posts({posts, setPosts, localToken, idUser}) {
             setLoading(false);
         })
     }, []) 
-   
+   console.log(posts)
 
 
 
@@ -228,16 +330,19 @@ export default function Posts({posts, setPosts, localToken, idUser}) {
           {posts.map((data) => (
             <RenderPosts
               idUser={idUser}
+              likesCount={data.likesCount}
               userId={data.id}
               setPosts={setPosts}
+              posts={posts}
               token={localToken}
-              postid={data.postid}
+              postid={data.postId}
               name={data.name}
               url={data.url}
               image={data.image}
               profile={data.profile}
               comment={data.comment}
               title={data.title}
+              likes={data.likes}
               description={data.description}
             />
           ))}
@@ -449,9 +554,13 @@ const PostInfo = styled.div`
   }
 `;
 
-const Likes = styled.img`
+const Likes = styled.div`
   margin-top: 19px;
   margin-bottom: 10px;
+  img{
+    width: 20px;
+    height: 18px;
+  }
 `;
 
 const Profile = styled.img`

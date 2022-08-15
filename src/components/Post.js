@@ -9,7 +9,7 @@ import edit from "../assets/edit.png";
 import heart from "../assets/heart.svg";
 import heartLiked from "../assets/heartLiked.svg";
 import Modal from "react-modal";
-
+import Tippy from '@tippyjs/react';
 export default function Post({
     likes,
     likesCount,
@@ -216,10 +216,13 @@ export default function Post({
         }
     }
     
-  
-  
-  
   }
+  let texto = ""
+if(likes.length === 0) {
+  texto = "Ninguém curtiu esse post"
+} else{
+  texto = `Curtido por ${likes[0].name} e outras ${likesCount-1} pessoas`
+}
         
   
       return (
@@ -244,14 +247,18 @@ export default function Post({
                         <Profile src={profile} />
   
   
-                        <Likes onClick={toggleLike} >
-  
+                        <Tippy content={<span style={{color: 'orange'}}>{texto}</span>} >
+                         <Likess onClick={toggleLike} >
+
                           {checkLike(likes)}
+                       
                           {(liked === "false") && (<img src={heart} />)}
                           {(liked === "true") && (<img src={heartLiked} />)}  
-  
-                        
-                          </Likes>
+                         
+                      
+                        </Likess>
+                        </Tippy>
+
   
   
                         <p>{likesCount} likes</p>
@@ -332,9 +339,7 @@ const PostSubtitle = styled.div`
 
 const PostLink = styled.div`
   width: 100%;
-  height: 100%;
-  left: 502px;
-  top: 596px;
+  height: 80%;
   border: 1px solid #4d4d4d;
   border-radius: 11px;
   display: flex;
@@ -378,8 +383,8 @@ const PostImage = styled.div`
   width: 40%;
   border-radius: 0px 12px 13px 0px;
   img {
-    width: 153.44px;
-    height: 155px;
+    width: 100%;
+    height: 100%;
   }
 `;
 
@@ -485,7 +490,7 @@ const PostInfo = styled.div`
   }
 `;
 
-const Likes = styled.div`
+const Likess = styled.div`
   margin-top: 19px;
   margin-bottom: 10px;
   img{

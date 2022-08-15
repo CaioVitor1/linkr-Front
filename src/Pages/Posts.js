@@ -9,7 +9,6 @@ import heart from "../assets/heart.svg";
 import heartLiked from "../assets/heartLiked.svg";
 import Modal from "react-modal";
 import Tippy from '@tippyjs/react';
-import { TooltipProps } from 'react-tooltip';
 
 function RenderPosts({
   likes,

@@ -40,7 +40,13 @@ export default function SearchBar() {
           value={search}
         />
         {users.map((user, index) => (
-          <span onClick={() => navigate(`/user/${user.id}`)} key={index}>
+          <span
+            onClick={() => {
+              navigate(`/user/${user.id}`);
+              window.location.reload();
+            }}
+            key={index}
+          >
             <img src={user.image} />
             <p>{user.name}</p>
           </span>

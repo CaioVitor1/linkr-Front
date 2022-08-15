@@ -3,7 +3,7 @@ import axios from 'axios';
 import styled from "styled-components"
 import { useNavigate } from 'react-router-dom';
 import { ReactTagify } from "react-tagify";
-
+import {pencil} from 'react-icons/fa'
 import trash from "../assets/trash.png";
 import edit from "../assets/edit.png";
 import heart from "../assets/heart.svg";
@@ -269,7 +269,7 @@ if(likes.length === 0) {
                                   <PostUser onClick={() => goToUserPage(userId)}> {name}</PostUser>
                               </Left>
                               {(idUser === userId) && (<Rigth>
-                                  <img onClick={editPost} src={edit} />
+                                  <img onClick={editPost} src={edit}/>
                                   <img onClick={openModal} src={trash} />
                               </Rigth>)}
                               
@@ -391,6 +391,10 @@ const PostImage = styled.div`
 const HeaderPost = styled.div`
   display: flex;
   justify-content: space-between;
+  img{
+    width: 15px;
+    height: 15px;
+  }
 `;
 const Left = styled.div``;
 
@@ -400,8 +404,8 @@ const Rigth = styled.div`
   align-items: center;
   img {
     margin-right: 10px;
-    width: 3vh;
-    height: 3vh;
+    width: 15px;
+    height: 15px;
     object-fit: fill;
   }
 `;

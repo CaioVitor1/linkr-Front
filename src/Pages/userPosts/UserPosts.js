@@ -52,7 +52,7 @@ export default function HashtagPosts(){
         <>
         <Header />
         <Container>
-        <Username><h1>{userName}</h1></Username>
+        <Username><h1>{userName}'s posts</h1></Username>
         <ContainerHashtagPosts>
         {loading === false && listUserPosts.length === 0 && (
           <NoPosts>There are no posts Yet</NoPosts>

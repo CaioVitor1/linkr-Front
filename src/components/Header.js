@@ -22,7 +22,7 @@ export default function Header() {
 
   return (
     <HeaderProfile>
-      <h1>Linkr</h1>
+      <h1 onClick={() => navigate("/timeline")}>Linkr</h1>
       <SearchBar />
       <Logout>
         <img
@@ -66,6 +66,7 @@ const HeaderProfile = styled.header`
   background-color: #151515;
 
   h1 {
+    cursor: pointer;
     font-family: "Passion One", cursive;
     font-size: 49px;
     font-weight: 700;
@@ -85,7 +86,7 @@ const Logout = styled.section`
 
   .menu {
     position: absolute;
-    top: 60px;
+    top: 74px;
     transition: 0.2s;
     width: 150px;
     height: 0px;
@@ -96,7 +97,7 @@ const Logout = styled.section`
 
   .open-menu {
     position: absolute;
-    top: 60px;
+    top: 74px;
     transition: 0.2s;
     width: 150px;
     height: 47px;

@@ -21,6 +21,7 @@ export default function SearchBar() {
 
     promise
       .then((res) => {
+        console.log(res.data);
         setUsers(res.data);
       })
       .catch((err) => {

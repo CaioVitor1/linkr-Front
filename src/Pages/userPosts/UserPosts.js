@@ -22,8 +22,14 @@ export default function HashtagPosts(){
 
     async function getUserPosts(){
 
+        const config = {
+            headers: {
+                Authorization: `Bearer ${localToken}`
+            }
+        }
+
         try{
-            const userPosts = await (await axios.get(`http://localhost:4000/user/${userId}`)).data;
+            const userPosts = await (await axios.get(`http://localhost:4000/user/${userId}`, config)).data;
 
             if(!userPosts){
                 console.log("Problema ao obter trending");
@@ -115,8 +121,6 @@ const ContainerHashtagPosts = styled.div`
   align-items: center;
   background-color: #333333;
 `;
-
-
 
 
 const Username = styled.div`

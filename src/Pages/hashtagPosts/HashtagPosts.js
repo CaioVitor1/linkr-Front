@@ -20,8 +20,14 @@ export default function HashtagPosts(){
 
     async function getHashtagPosts(){
 
+        const config = {
+            headers: {
+                Authorization: `Bearer ${localToken}`
+            }
+        }
+
         try{
-            const hashtagPosts = await (await axios.get(`http://localhost:4000/hashtag/${hashtagName}`)).data;
+            const hashtagPosts = await (await axios.get(`http://localhost:4000/hashtag/${hashtagName}`, config)).data;
 
             if(!hashtagPosts){
                 console.log("Problema ao obter trending");

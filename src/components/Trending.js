@@ -7,6 +7,7 @@ export default function Trending(){
 
     const [listTrendingData, setListTrendingData] = useState([]);
     const navigate = useNavigate();
+    const localToken = localStorage.getItem("token");
 
     
     useEffect(() => {
@@ -16,8 +17,14 @@ export default function Trending(){
 
     async function getTrendingData(){
 
+        const config = {
+            headers: {
+                Authorization: `Bearer ${localToken}`
+            }
+        }
+
         try{
-            const trendingData = await (await axios.get('http://localhost:4000/trendingRanking')).data;
+            const trendingData = await (await axios.get('http://localhost:4000/trendingRanking', config)).data;
 
             if(!trendingData){
                 console.log("Problema ao obter trending");

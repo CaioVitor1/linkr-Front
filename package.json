@@ -13,6 +13,7 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "^4.0.3",
     "react-select-search": "^3.0.10",
+    "react-tagify": "^0.1.4",
     "styled-components": "^5.3.5",
     "url-metadata": "^2.5.0"
   },

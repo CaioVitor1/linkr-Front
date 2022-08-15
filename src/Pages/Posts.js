@@ -27,7 +27,7 @@ export default function Posts({posts, setPosts, localToken, idUser}) {
         const promise = axios.get("https://projeto-linkr-back.herokuapp.com/getposts", config)
         promise
         .then(res =>{
-            console.log(res.data);
+           
             setPosts(res.data);
             setLoading(false);         
         })

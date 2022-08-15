@@ -54,18 +54,18 @@ export default function Post({
       }
   
     function deleteLike() {
-      console.log("chegou aqui")
+      
   
     let body = {
       idUser: idUser,
       postid: postid
     }
-    console.log(body)
+   
    
     const promise = axios.post("https://projeto-linkr-back.herokuapp.com/deletelikes", body, config)
     promise
     .then(res =>{
-        console.log(res.data)
+       
         updatePosts()
        
     })
@@ -86,7 +86,7 @@ export default function Post({
     const promise = axios.post("https://projeto-linkr-back.herokuapp.com/addlikes", body, config)
     promise
     .then(res =>{
-        console.log(res.data)
+        
         updatePosts()
        
     })
@@ -101,17 +101,15 @@ export default function Post({
         
         if(liked === "false") {
           liked = "true"
-          console.log("mudei pra true")
+          
           //Acrescenta like
-          console.log(idUser)
-          console.log(postid)
           addLike()
           return
         } 
   
         if(liked === "true") {
           liked = "false"
-          console.log("mudei pra false")
+          
           //remove like
           deleteLike()
      
@@ -171,7 +169,7 @@ export default function Post({
               setEdition(false)
           } if(e.key === "Enter" && updateComment !== comment) {
               setLoadingEdit(true)
-              console.log("apertaram o Enter");
+             
   
               let body = {
                   updateComment: updateComment,
@@ -184,7 +182,7 @@ export default function Post({
                   setLoadingEdit(false)
                   updatePosts()
                   setEdition(false)
-                  console.log(res.data)
+                  
                  
                  
               })
@@ -196,7 +194,7 @@ export default function Post({
               })
           } 
           if(e.key === "Enter" && updateComment === comment){
-              console.log("O texto não foi alterado")
+             
               setEdition(false)
       }
   }
@@ -204,11 +202,11 @@ export default function Post({
   function checkLike(likes){
   
     if(likes.length === 0) {
-      return console.log("ninguém deu like")
+      return 
       
     } 
       for(let i = 0; i < likes.length; i++) {
-        console.log(likes.length)
+       
         if(likes[i].userId === idUser){
            //setIsliked(true)
            liked = "true"

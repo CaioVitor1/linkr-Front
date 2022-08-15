@@ -409,7 +409,7 @@ const Rigth = styled.div`
 `;
 const ModalStyle = styled.div`
   margin-top: 150px;
-  margin-left: 70px;
+  margin-left: 270px;
   width: 597px;
   height: 262px;
   background: #333333;

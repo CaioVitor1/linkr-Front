@@ -2,12 +2,24 @@ import styled from "styled-components";
 
 export const AuthScreen = styled.div`
   display: flex;
+  @media (max-width: 1066px) {
+    flex-direction: column;
+  }
 `;
 
 export const AuthLogo = styled.div`
   background-color: #151515;
   height: 100vh;
-  width: 60%;
+  min-width: 60%;
+
+  @media (max-width: 1066px) {
+    height: 100%;
+    width: 100%;
+  }
+
+  @media (max-width: 435px) {
+    height: 50vh;
+  }
 `;
 
 export const InfosLogo = styled.div`
@@ -27,6 +39,26 @@ export const InfosLogo = styled.div`
     color: #fff;
     width: 442px;
   }
+
+  @media (max-width: 1066px) {
+    margin: 120px auto;
+    h1 {
+      text-align: center;
+      font-family: "Passion One", cursive;
+      font-size: 76px;
+      font-weight: 700;
+      color: #fff;
+    }
+    h2 {
+      margin: 0 auto;
+      width: auto;
+      text-align: center;
+      font-family: "Oswald", sans-serif;
+      font-size: 23px;
+      font-weight: 700;
+      color: #fff;
+    }
+  }
 `;
 
 export const AuthInputs = styled.div`
@@ -36,17 +68,27 @@ export const AuthInputs = styled.div`
   border-left: 4px solid rgba(0, 0, 0, 0.1);
   background-color: #333333;
   height: 100vh;
-  width: 40%;
+  min-width: 40%;
+
+  @media (max-width: 1066px) {
+    width: 100%;
+    height: 70vh;
+  }
 `;
 
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
+  align-items: center;
   margin-top: 355px;
+
+  @media (max-width: 1066px) {
+    margin-top: 20px;
+  }
 `;
 
 export const Input = styled.input`
-  width: 429px;
+  min-width: 429px;
   height: 65px;
   border-radius: 6px;
   margin-bottom: 13px;
@@ -62,6 +104,10 @@ export const Input = styled.input`
     color: #9f9f9f;
     font-size: 27px;
     font-weight: 700;
+  }
+
+  @media (max-width: 435px) {
+    min-width: 330px;
   }
 `;
 
@@ -83,7 +129,7 @@ export const AuthButton = styled.button`
   align-items: center;
   cursor: pointer;
   height: 65px;
-  width: 429px;
+  min-width: 429px;
 
   font-family: "Oswald", sans-serif;
   font-size: 27px;
@@ -96,6 +142,10 @@ export const AuthButton = styled.button`
 
   svg {
     height: 1rem;
+  }
+
+  @media (max-width: 435px) {
+    min-width: 330px;
   }
 `;
 

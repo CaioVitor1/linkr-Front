@@ -17,7 +17,7 @@ export default function SearchBar() {
       return;
     }
 
-    const promise = axios.get(`http://localhost:4000/users/?search=${search}`);
+    const promise = axios.get(`https://projeto-linkr-back.herokuapp.com/users/?search=${search}`);
 
     promise
       .then((res) => {

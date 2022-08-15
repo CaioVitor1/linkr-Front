@@ -27,7 +27,7 @@ export default function HashtagPosts(){
         }
 
         try{
-            const hashtagPosts = await (await axios.get(`http://localhost:4000/hashtag/${hashtagName}`, config)).data;
+            const hashtagPosts = await (await axios.get(`https://projeto-linkr-back.herokuapp.com/hashtag/${hashtagName}`, config)).data;
 
             if(!hashtagPosts){
                 console.log("Problema ao obter trending");

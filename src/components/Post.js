@@ -62,7 +62,7 @@ export default function Post({
     }
     console.log(body)
    
-    const promise = axios.post("http://localhost:4000/deletelikes", body, config)
+    const promise = axios.post("https://projeto-linkr-back.herokuapp.com/deletelikes", body, config)
     promise
     .then(res =>{
         console.log(res.data)
@@ -83,7 +83,7 @@ export default function Post({
       postid: postid
     }
    
-    const promise = axios.post("http://localhost:4000/addlikes", body, config)
+    const promise = axios.post("https://projeto-linkr-back.herokuapp.com/addlikes", body, config)
     promise
     .then(res =>{
         console.log(res.data)
@@ -137,7 +137,7 @@ export default function Post({
       }
       function updatePosts() {
   
-          const promise = axios.get("http://localhost:4000/getposts", config)
+          const promise = axios.get("https://projeto-linkr-back.herokuapp.com/getposts", config)
           promise
           .then(res =>{
               setPosts(res.data)
@@ -152,7 +152,7 @@ export default function Post({
       }
       function deletePost() {
           
-          const promise = axios.delete(`http://localhost:4000/deletepost/${postid}`, config);
+          const promise = axios.delete(`https://projeto-linkr-back.herokuapp.com/deletepost/${postid}`, config);
           promise
           .then(res =>{
               updatePosts()
@@ -178,7 +178,7 @@ export default function Post({
                   url: url
               }
   
-              const promise = axios.put("http://localhost:4000/updateposts", body, config)
+              const promise = axios.put("https://projeto-linkr-back.herokuapp.com/updateposts", body, config)
               promise
               .then(res =>{
                   setLoadingEdit(false)

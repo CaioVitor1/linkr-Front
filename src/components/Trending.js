@@ -24,7 +24,7 @@ export default function Trending(){
         }
 
         try{
-            const trendingData = await (await axios.get('http://localhost:4000/trendingRanking', config)).data;
+            const trendingData = await (await axios.get('https://projeto-linkr-back.herokuapp.com/trendingRanking', config)).data;
 
             if(!trendingData){
                 console.log("Problema ao obter trending");

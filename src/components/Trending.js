@@ -12,7 +12,7 @@ export default function Trending(){
     
     useEffect(() => {
         getTrendingData();
-    }, []);
+    }, [listTrendingData]);
 
 
     async function getTrendingData(){

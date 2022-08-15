@@ -60,7 +60,6 @@ export default function NewPost({posts, setPosts, localToken, imageProfile}) {
 
     return (
         <>
-        <TimelineTitle> <h2> Timeline</h2> </TimelineTitle>
         <NewPostBody>
             <img src={imageProfile} />
            <InputNewPost>
@@ -84,20 +83,11 @@ export default function NewPost({posts, setPosts, localToken, imageProfile}) {
     )
 }
 
-const TimelineTitle = styled.div`
-width: 45%;
-font-family: 'Oswald';
-font-style: normal;
-font-weight: 700;
-font-size: 43px;
-line-height: 64px;
-color: #FFFFFF;
-`
 
 const NewPostBody = styled.div`
 
 padding: 20px;
-width: 45%;
+width: 60%;
 height: 30vh;
 background: #FFFFFF;
 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);

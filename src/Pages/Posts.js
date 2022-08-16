@@ -1,44 +1,36 @@
+import { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import styled from "styled-components";
+import Post from "../components/Post.js";
 
-import { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-import styled from "styled-components"
-import Post from '../components/Post.js';
+export default function Posts({ posts, setPosts, localToken, idUser }) {
+  const [loading, setLoading] = useState(false);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${localToken}`,
+    },
+  };
 
+  useEffect(() => {
+    setLoading(true);
+    getPosts();
+  }, []);
 
-export default function Posts({posts, setPosts, localToken, idUser}) {
-
-    const [loading, setLoading] = useState(false);
-    const config = {
-        headers: {
-            Authorization: `Bearer ${localToken}`
-        }
-    }
-  
-    useEffect(() => {
-        setLoading(true);
-        getPosts();
-    }, []);
-
-
-
-    async function getPosts(){
-
-            
-        const promise = axios.get("https://projeto-linkr-back.herokuapp.com/getposts", config)
-        promise
-        .then(res =>{
-           
-            setPosts(res.data);
-            setLoading(false);         
-        })
-        .catch(err => {
-            console.log(err);
-            alert("An error occured while trying to fetch the posts, please refresh the page")
-            setLoading(false);
-        });
-
-    }
-
+  async function getPosts() {
+    const promise = axios.get("http://localhost:4000/getposts", config);
+    promise
+      .then((res) => {
+        setPosts(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(
+          "An error occured while trying to fetch the posts, please refresh the page"
+        );
+        setLoading(false);
+      });
+  }
 
   return (
     <>
@@ -85,4 +77,3 @@ const NoPosts = styled.div`
   color: White;
   margin-bottom: 40px;
 `;
-

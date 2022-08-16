@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { DebounceInput } from "react-debounce-input";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import searchImg from "../assets/search.svg";
 import axios from "axios";
 
 export default function SearchBar() {
@@ -17,7 +16,9 @@ export default function SearchBar() {
       return;
     }
 
-    const promise = axios.get(`https://projeto-linkr-back.herokuapp.com/users/?search=${search}`);
+    const promise = axios.get(
+      `https://projeto-linkr-back.herokuapp.com/users/?search=${search}`
+    );
 
     promise
       .then((res) => {

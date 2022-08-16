@@ -1,304 +1,304 @@
-import { useState, useEffect, useRef} from 'react';
-import axios from 'axios';
-import styled from "styled-components"
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import { ReactTagify } from "react-tagify";
-import {pencil} from 'react-icons/fa'
+import { pencil } from "react-icons/fa";
 import trash from "../assets/trash.png";
 import edit from "../assets/edit.png";
 import heart from "../assets/heart.svg";
 import heartLiked from "../assets/heartLiked.svg";
 import Modal from "react-modal";
-import Tippy from '@tippyjs/react';
+import Tippy from "@tippyjs/react";
 export default function Post({
-    likes,
-    likesCount,
-    posts,
-    name,
-    userId,
-    idUser,
-    url,
-    image,
-    profile,
-    description,
-    comment,
-    title,
-    token,
-    postid,
-    setPosts,
-  }) 
-{
-      const [modalIsOpen, setIsOpen] = useState(false);
-      const [edition, setEdition] = useState(false);
-      const [updateComment, setUpdateComment] = useState(comment);
-      const [loadingEdit, setLoadingEdit] = useState(false)
-     // heart e heartLiked são as imagens dos corações preenchidos ou não.
-     //UserId: Id de quem escreveu o post; idUser: Id do usuário logado
-      const [imgheart, setImgheart] = useState(heart);
-      const [isliked, setIsliked] = useState(false);
-      const navigate = useNavigate();
+  likes,
+  likesCount,
+  posts,
+  name,
+  userId,
+  idUser,
+  url,
+  image,
+  profile,
+  description,
+  comment,
+  title,
+  token,
+  postid,
+  setPosts,
+}) {
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [edition, setEdition] = useState(false);
+  const [updateComment, setUpdateComment] = useState(comment);
+  const [loadingEdit, setLoadingEdit] = useState(false);
+  // heart e heartLiked são as imagens dos corações preenchidos ou não.
+  //UserId: Id de quem escreveu o post; idUser: Id do usuário logado
+  const [imgheart, setImgheart] = useState(heart);
+  const [isliked, setIsliked] = useState(false);
+  const navigate = useNavigate();
 
-      function goToUserPage(userId){
-          navigate(`/user/${userId}`);
-      }
-  
-      function goToHashtagPage(tag){
-          const hashtag = tag.substring(1);
-          navigate(`/hashtag/${hashtag}`);
-      }
-    
-      const config = {
-          headers: {
-              Authorization: `Bearer ${token}`
-          }
-      }
-  
-    function deleteLike() {
-      
-  
+  function goToUserPage(userId) {
+    navigate(`/user/${userId}`);
+  }
+
+  function goToHashtagPage(tag) {
+    const hashtag = tag.substring(1);
+    navigate(`/hashtag/${hashtag}`);
+  }
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  function deleteLike() {
     let body = {
       idUser: idUser,
-      postid: postid
-    }
-   
-   
-    const promise = axios.post("https://projeto-linkr-back.herokuapp.com/deletelikes", body, config)
+      postid: postid,
+    };
+
+    const promise = axios.post(
+      "http://localhost:4000/deletelikes",
+      body,
+      config
+    );
     promise
-    .then(res =>{
-       
-        updatePosts()
-       
-    })
-    .catch(err => {
+      .then((res) => {
+        updatePosts();
+      })
+      .catch((err) => {
         console.log(err);
-        alert("An error occured while trying to fetch the posts, please refresh the page")
-        
-    })
-    }
-  
-    function addLike() {
-  
+        alert(
+          "An error occured while trying to fetch the posts, please refresh the page"
+        );
+      });
+  }
+
+  function addLike() {
     let body = {
       idUser: idUser,
-      postid: postid
-    }
-   
-    const promise = axios.post("https://projeto-linkr-back.herokuapp.com/addlikes", body, config)
+      postid: postid,
+    };
+
+    const promise = axios.post("http://localhost:4000/addlikes", body, config);
     promise
-    .then(res =>{
-        
-        updatePosts()
-       
-    })
-    .catch(err => {
+      .then((res) => {
+        updatePosts();
+      })
+      .catch((err) => {
         console.log(err);
-        alert("An error occured while trying to fetch the posts, please refresh the page")
-        
-    })
-    }
-  
-      function toggleLike() {
-        
-        if(liked === "false") {
-          liked = "true"
-          
-          //Acrescenta like
-          addLike()
-          return
-        } 
-  
-        if(liked === "true") {
-          liked = "false"
-          
-          //remove like
-          deleteLike()
-     
-        }
-  
-  
-       
-      }
-    
-      
-      let inputComment = useRef();
-      
-      Modal.setAppElement('.root');
-      function openLink() {
-          window.open(url)
-      }
-  
-      function openModal() {
-          setIsOpen(true);
-      }
-      function closeModal(){
-          setIsOpen(false)
-      }
-      function updatePosts() {
-  
-          const promise = axios.get("https://projeto-linkr-back.herokuapp.com/getposts", config)
-          promise
-          .then(res =>{
-              setPosts(res.data)
-              
-             
-          })
-          .catch(err => {
-              console.log(err);
-              alert("An error occured while trying to fetch the posts, please refresh the page")
-              
-          });
-      }
-      function deletePost() {
-          
-          const promise = axios.delete(`https://projeto-linkr-back.herokuapp.com/deletepost/${postid}`, config);
-          promise
-          .then(res =>{
-              updatePosts()
-              setIsOpen(false)
-          })
-          .catch(err => {
-              setIsOpen(false)
-              console.log(err);
-              alert("Houve erro ao deletar seu link")
-          })
-      }
-      
-      function editPost(e){
-          setEdition(true);
-          if(e.key === "Escape") {
-              setEdition(false)
-          } if(e.key === "Enter" && updateComment !== comment) {
-              setLoadingEdit(true)
-             
-  
-              let body = {
-                  updateComment: updateComment,
-                  url: url
-              }
-  
-              const promise = axios.put("https://projeto-linkr-back.herokuapp.com/updateposts", body, config)
-              promise
-              .then(res =>{
-                  setLoadingEdit(false)
-                  updatePosts()
-                  setEdition(false)
-                  
-                 
-                 
-              })
-              .catch(err => {
-                  console.log(err);
-                  setLoadingEdit(false)
-                  alert("An error occurred while trying to update the comment. Try again!An error occured while trying to fetch the posts, please refresh the page")
-                 
-              })
-          } 
-          if(e.key === "Enter" && updateComment === comment){
-             
-              setEdition(false)
-      }
+        alert(
+          "An error occured while trying to fetch the posts, please refresh the page"
+        );
+      });
   }
-  let liked = "false"
-  function checkLike(likes){
-  
-    if(likes.length === 0) {
-      return 
-      
-    } 
-      for(let i = 0; i < likes.length; i++) {
-       
-        if(likes[i].userId === idUser){
-           //setIsliked(true)
-           liked = "true"
-         
-        }
+
+  function toggleLike() {
+    if (liked === "false") {
+      liked = "true";
+
+      //Acrescenta like
+      addLike();
+      return;
     }
-    
+
+    if (liked === "true") {
+      liked = "false";
+
+      //remove like
+      deleteLike();
+    }
   }
-  let texto = ""
-if(likes.length === 0) {
-  texto = "Ninguém curtiu esse post"
-} else{
-  texto = `Curtido por ${likes[0].name} e outras ${likesCount-1} pessoas`
-}
-        
-  
-      return (
-          <PostsBody>
-              <Modal
-              isOpen={modalIsOpen}
-              onRequestClose={closeModal}
-              style={ModalStyle}
-              >
-                  <ModalStyle>
-                      <h2>Are you sure you want to delete this post?</h2>
-                      <ButtonsModal>
-                          <Back onClick={closeModal}> No, go back</Back>
-                          <Confirm onClick={deletePost}> Yes, delete it</Confirm>
-                      </ButtonsModal>
-                     
-                  </ModalStyle>
-                 
-  
-              </Modal>
-                     <PostInfo>
-                        <Profile src={profile} />
-  
-  
-                        <Tippy content={<span style={{color: 'orange'}}>{texto}</span>} >
-                         <Likess onClick={toggleLike} >
 
-                          {checkLike(likes)}
-                       
-                          {(liked === "false") && (<img src={heart} />)}
-                          {(liked === "true") && (<img src={heartLiked} />)}  
-                         
-                      
-                        </Likess>
-                        </Tippy>
+  let inputComment = useRef();
 
-  
-  
-                        <p>{likesCount} likes</p>
-                      </PostInfo>
-                      <PostDescription>
-                          <HeaderPost>
-                              <Left>
-                                  <PostUser onClick={() => goToUserPage(userId)}> {name}</PostUser>
-                              </Left>
-                              {(idUser === userId) && (<Rigth>
-                                  <img onClick={editPost} src={edit}/>
-                                  <img onClick={openModal} src={trash} />
-                              </Rigth>)}
-                              
-                          </HeaderPost>
-                          {(edition === false) && (<PostSubtitle><ReactTagify 
-                            tagStyle={tagStyle}
-                            tagClicked={(tag)=> goToHashtagPage(tag)}>
-                             {comment}</ReactTagify>
-                             </PostSubtitle>)}
-                          {(edition === true) && (loadingEdit === false) && (<PostInput> <input autoFocus type='text' ref={inputComment} onKeyDown={editPost} value={updateComment} onChange={(e) => setUpdateComment(e.target.value)}/> </PostInput>)}
-                          {(edition === true) && (loadingEdit === true) && (<PostInput> <input disabled value={updateComment} type='text' /> </PostInput>)}
-                          <PostLink onClick={openLink}> 
-                              <PostContent>
-                                  <h2>{title}</h2>
-                                  <h3>{description}</h3>
-                                  <h4>{url}</h4>
-                              </PostContent>
-                              <PostImage>
-                                  <img src={image} />
-                              </PostImage>
-                          </PostLink>
-                      </PostDescription>
-          </PostsBody>
+  Modal.setAppElement(".root");
+  function openLink() {
+    window.open(url);
+  }
+
+  function openModal() {
+    setIsOpen(true);
+  }
+  function closeModal() {
+    setIsOpen(false);
+  }
+  function updatePosts() {
+    const promise = axios.get("http://localhost:4000/getposts", config);
+    promise
+      .then((res) => {
+        setPosts(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(
+          "An error occured while trying to fetch the posts, please refresh the page"
+        );
+      });
+  }
+  function deletePost() {
+    const promise = axios.delete(
+      `http://localhost:4000/deletepost/${postid}`,
+      config
+    );
+    promise
+      .then((res) => {
+        updatePosts();
+        setIsOpen(false);
+      })
+      .catch((err) => {
+        setIsOpen(false);
+        console.log(err);
+        alert("Houve erro ao deletar seu link");
+      });
+  }
+
+  function editPost(e) {
+    setEdition(true);
+    if (e.key === "Escape") {
+      setEdition(false);
+    }
+    if (e.key === "Enter" && updateComment !== comment) {
+      setLoadingEdit(true);
+
+      let body = {
+        updateComment: updateComment,
+        url: url,
+      };
+
+      const promise = axios.put(
+        "http://localhost:4000/updateposts",
+        body,
+        config
       );
+      promise
+        .then((res) => {
+          setLoadingEdit(false);
+          updatePosts();
+          setEdition(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoadingEdit(false);
+          alert(
+            "An error occurred while trying to update the comment. Try again!An error occured while trying to fetch the posts, please refresh the page"
+          );
+        });
+    }
+    if (e.key === "Enter" && updateComment === comment) {
+      setEdition(false);
+    }
+  }
+  let liked = "false";
+  function checkLike(likes) {
+    if (likes.length === 0) {
+      return;
+    }
+    for (let i = 0; i < likes.length; i++) {
+      if (likes[i].userId === idUser) {
+        //setIsliked(true)
+        liked = "true";
+      }
+    }
+  }
+  let texto = "";
+  if (likes.length === 0) {
+    texto = "Ninguém curtiu esse post";
+  } else {
+    texto = `Curtido por ${likes[0].name} e outras ${likesCount - 1} pessoas`;
+  }
+
+  return (
+    <PostsBody>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={ModalStyle}
+      >
+        <ModalStyle>
+          <h2>Are you sure you want to delete this post?</h2>
+          <ButtonsModal>
+            <Back onClick={closeModal}> No, go back</Back>
+            <Confirm onClick={deletePost}> Yes, delete it</Confirm>
+          </ButtonsModal>
+        </ModalStyle>
+      </Modal>
+      <PostInfo>
+        <Profile src={profile} />
+
+        <Tippy content={<span style={{ color: "orange" }}>{texto}</span>}>
+          <Likess onClick={toggleLike}>
+            {checkLike(likes)}
+
+            {liked === "false" && <img src={heart} />}
+            {liked === "true" && <img src={heartLiked} />}
+          </Likess>
+        </Tippy>
+
+        <p>{likesCount} likes</p>
+      </PostInfo>
+      <PostDescription>
+        <HeaderPost>
+          <Left>
+            <PostUser onClick={() => goToUserPage(userId)}> {name}</PostUser>
+          </Left>
+          {idUser === userId && (
+            <Rigth>
+              <img onClick={editPost} src={edit} />
+              <img onClick={openModal} src={trash} />
+            </Rigth>
+          )}
+        </HeaderPost>
+        {edition === false && (
+          <PostSubtitle>
+            <ReactTagify
+              tagStyle={tagStyle}
+              tagClicked={(tag) => goToHashtagPage(tag)}
+            >
+              {comment}
+            </ReactTagify>
+          </PostSubtitle>
+        )}
+        {edition === true && loadingEdit === false && (
+          <PostInput>
+            {" "}
+            <input
+              autoFocus
+              type="text"
+              ref={inputComment}
+              onKeyDown={editPost}
+              value={updateComment}
+              onChange={(e) => setUpdateComment(e.target.value)}
+            />{" "}
+          </PostInput>
+        )}
+        {edition === true && loadingEdit === true && (
+          <PostInput>
+            {" "}
+            <input disabled value={updateComment} type="text" />{" "}
+          </PostInput>
+        )}
+        <PostLink onClick={openLink}>
+          <PostContent>
+            <h2>{title}</h2>
+            <h3>{description}</h3>
+            <h4>{url}</h4>
+          </PostContent>
+          <PostImage>
+            <img src={image} />
+          </PostImage>
+        </PostLink>
+      </PostDescription>
+    </PostsBody>
+  );
 }
 
 const tagStyle = {
-    color: 'white',
-    fontWeight: 700,
-    cursor: 'pointer'
-  };
+  color: "white",
+  fontWeight: 700,
+  cursor: "pointer",
+};
 
 const PostsBody = styled.div`
   margin-bottom: 20px;
@@ -389,7 +389,7 @@ const PostImage = styled.div`
 const HeaderPost = styled.div`
   display: flex;
   justify-content: space-between;
-  img{
+  img {
     width: 15px;
     height: 15px;
   }
@@ -463,20 +463,19 @@ const Confirm = styled.div`
 `;
 
 const ButtonsModal = styled.div`
-
-display: flex;
-justify-content: center;
-align-items: center;
-margin-top: 30px;
-`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+`;
 const PostInput = styled.div`
-input {
-width: 100%;
-margin-bottom: 10px;
-background: #FFFFFF;
-border-radius: 7px; 
-}
-`
+  input {
+    width: 100%;
+    margin-bottom: 10px;
+    background: #ffffff;
+    border-radius: 7px;
+  }
+`;
 
 const PostInfo = styled.div`
   display: flex;
@@ -495,7 +494,7 @@ const PostInfo = styled.div`
 const Likess = styled.div`
   margin-top: 19px;
   margin-bottom: 10px;
-  img{
+  img {
     width: 20px;
     height: 18px;
   }
@@ -507,4 +506,3 @@ const Profile = styled.img`
   left: 433px;
   border-radius: 26.5px;
 `;
-

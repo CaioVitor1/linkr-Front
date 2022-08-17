@@ -14,13 +14,13 @@ export default function HashtagPosts(){
     const localToken = localStorage.getItem("token");
     const userData = jwt(localToken);
     const [loading, setLoading] = useState(false);
-    const profileId = parseInt(userData.id)
-    const follower = parseInt(userId) 
+    const follower = parseInt(userData.id)
+    const profileId = parseInt(userId) 
     const [following, setFollowing] = useState(false) //diz se os usuários já se seguem
     const [loadFollow, setLoadFollow] = useState(false) 
-console.log(following)
-console.log(profileId, follower)
-console.log(localToken)
+
+console.log("o profileID é " + profileId)
+console.log("o follower é: " + follower)
 
     useEffect(() => {
         getUserPosts();

@@ -21,7 +21,7 @@ export default function NewPost({posts, setPosts, localToken, imageProfile}) {
                 Authorization: `Bearer ${localToken}`
             }
         }
-        const promise = axios.post("https://projeto-linkr-back.herokuapp.com/newpost", body, config);
+        const promise = axios.post("http://localhost:4000/newpost", body, config);
         promise
         .then(res =>{
             setLoading(false)
@@ -43,7 +43,7 @@ export default function NewPost({posts, setPosts, localToken, imageProfile}) {
                 Authorization: `Bearer ${localToken}`
             }
         }
-        const promise = axios.get("https://projeto-linkr-back.herokuapp.com/getposts", config)
+        const promise = axios.get("http://localhost:4000/getposts", config)
         promise
         .then(res =>{
             setPosts(res.data)

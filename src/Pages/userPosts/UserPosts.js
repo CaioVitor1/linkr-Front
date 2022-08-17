@@ -5,7 +5,7 @@ import Header from "../../components/Header";
 import styled from "styled-components";
 import jwt from "jwt-decode";
 import Post from "../../components/Post";
-
+import Follow  from "../../components/Follow.js";
 
 export default function HashtagPosts(){
     const { userId } = useParams();
@@ -14,14 +14,20 @@ export default function HashtagPosts(){
     const localToken = localStorage.getItem("token");
     const userData = jwt(localToken);
     const [loading, setLoading] = useState(false);
+    const follower = parseInt(userData.id)
+    const profileId = parseInt(userId) 
+    const [following, setFollowing] = useState(false) //diz se os usuários já se seguem
+    const [loadFollow, setLoadFollow] = useState(false) 
 
     useEffect(() => {
         getUserPosts();
     }, []);
-
+    
+    useEffect(() => {
+      getFollowing();
+  }, []); 
 
     async function getUserPosts(){
-
         const config = {
             headers: {
                 Authorization: `Bearer ${localToken}`
@@ -29,7 +35,7 @@ export default function HashtagPosts(){
         }
 
         try{
-            const userPosts = await (await axios.get(`https://projeto-linkr-back.herokuapp.com/user/${userId}`, config)).data;
+            const userPosts = await (await axios.get(`http://localhost:4000/user/${userId}`, config)).data;
 
             if(!userPosts){
                 console.log("Problema ao obter trending");
@@ -37,22 +43,52 @@ export default function HashtagPosts(){
 
             console.log("resposta userPosts: " );
             console.log(userPosts);
-
-
             setUserName(userPosts[0].name);
             setListUserPosts([...userPosts]);
-
         }catch(error){
             console.log(error);
         }
+    }
 
+   function getFollowing() {
+     const config = {
+        headers: {
+            Authorization: `Bearer ${localToken}`
+        }
+    } 
+      const promise = axios.get(`http://localhost:4000/follow/${profileId}`, config)
+      promise
+    .then(res =>{  
+      console.log("tá aqui")
+      console.log(profileId) 
+      console.log(follower)    
+      console.log(res.data)
+      setFollowing(res.data)
+    })
+    .catch(err => {
+        console.log(err);
+        alert("An error occured while trying looking for following")
+    
+    });
     }
 
     return(
         <>
         <Header />
         <Container>
-        <Username><h1>{userName}'s posts</h1></Username>
+        <Username>
+          <h1>{userName}'s posts</h1>
+
+          <Follow 
+                profileId={profileId}
+                follower={follower}
+                loadFollow={loadFollow} 
+                setLoadFollow={setLoadFollow} 
+                following={following} 
+                setFollowing={setFollowing} 
+                localToken={localToken} />
+        </Username>
+
         <ContainerHashtagPosts>
         {loading === false && listUserPosts.length === 0 && (
           <NoPosts>There are no posts Yet</NoPosts>
@@ -124,8 +160,13 @@ const ContainerHashtagPosts = styled.div`
 
 
 const Username = styled.div`
-    width: 40%;
+    width: 70%;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 300px;
     margin-bottom: 2vh;
+    display: flex;
+    
     h1{
         font-family: 'Oswald';
         font-style: normal;
@@ -135,3 +176,4 @@ const Username = styled.div`
         color: #FFFFFF;
     }
 `
+

@@ -24,7 +24,7 @@ export default function Posts({posts, setPosts, localToken, idUser}) {
     async function getPosts(){
 
             
-        const promise = axios.get("https://projeto-linkr-back.herokuapp.com/getposts", config)
+        const promise = axios.get("http://localhost:4000/getposts", config)
         promise
         .then(res =>{
            

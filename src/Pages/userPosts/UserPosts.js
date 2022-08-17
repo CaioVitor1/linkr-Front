@@ -5,7 +5,7 @@ import Header from "../../components/Header";
 import styled from "styled-components";
 import jwt from "jwt-decode";
 import Post from "../../components/Post";
-
+import Follow  from "../../components/Follow.js";
 
 export default function HashtagPosts(){
     const { userId } = useParams();
@@ -19,9 +19,6 @@ export default function HashtagPosts(){
     const [following, setFollowing] = useState(false) //diz se os usuários já se seguem
     const [loadFollow, setLoadFollow] = useState(false) 
 
-console.log("o profileID é " + profileId)
-console.log("o follower é: " + follower)
-
     useEffect(() => {
         getUserPosts();
     }, []);
@@ -29,61 +26,6 @@ console.log("o follower é: " + follower)
     useEffect(() => {
       getFollowing();
   }, []); 
-
-   function addFollow() {
-    setLoadFollow(true);
-console.log("chegou aqui")
-    let body = {
-      profileId: profileId,
-      follower: follower
-    }
-    
-    const config = {
-      headers: {
-          Authorization: `Bearer ${localToken}`
-      }
-  }
-  console.log(body)
-    const promise = axios.post("http://localhost:4000/follow", body, config)
-    promise
-    .then(res =>{       
-      console.log("chegou aqui")
-      console.log(res.data)
-      setLoadFollow(false); 
-      setFollowing(true)
-    })
-    .catch(err => {
-        console.log(err);
-        setLoadFollow(false); 
-        alert("An error occured while trying add new follow")
-    
-    });
-
-   }
-   function removeFollow() {
-    setLoadFollow(true)
-    console.log(profileId)
-    
-    const config = {
-      headers: {
-          Authorization: `Bearer ${localToken}`
-      }
-  }
-
-    const promise = axios.delete(`http://localhost:4000/follow/${profileId}`, config)
-    promise
-    .then(res =>{       
-      console.log(res.data)
-      setLoadFollow(false); 
-      setFollowing(false)
-    })
-    .catch(err => {
-        console.log(err);
-        setLoadFollow(false); 
-        alert("An error occured while trying unfollow, please refresh the page")
-    
-    });
-   }
 
     async function getUserPosts(){
         const config = {
@@ -136,11 +78,17 @@ console.log("chegou aqui")
         <Container>
         <Username>
           <h1>{userName}'s posts</h1>
-          {(profileId !== follower) && (loadFollow === false) && (following === false) && (<Follow onClick={addFollow}> Follow</Follow>)}
-          {(profileId !== follower) && (loadFollow === false) && (following === true) && (<Follow onClick={removeFollow}> Unfollow</Follow>)}
-          {(profileId !== follower) && (loadFollow === true) && (following === false) && (<DisFollow> Follow</DisFollow>)}
-          {(profileId !== follower) && (loadFollow === true) && (following === true) && (<DisFollow> Unfollow</DisFollow>)}
+
+          <Follow 
+                profileId={profileId}
+                follower={follower}
+                loadFollow={loadFollow} 
+                setLoadFollow={setLoadFollow} 
+                following={following} 
+                setFollowing={setFollowing} 
+                localToken={localToken} />
         </Username>
+
         <ContainerHashtagPosts>
         {loading === false && listUserPosts.length === 0 && (
           <NoPosts>There are no posts Yet</NoPosts>
@@ -229,33 +177,3 @@ const Username = styled.div`
     }
 `
 
-const Follow = styled.button`
-display: flex;
-justify-content: center;
-align-items: center;
-width: 112px;
-height: 31px;
-background: #1877F2;
-border-radius: 5px;
-font-family: 'Lato';
-font-style: normal;
-font-weight: 700;
-font-size: 14px;
-line-height: 17px;
-color: #FFFFFF;
-`
-const DisFollow = styled.button`
-display: flex;
-justify-content: center;
-align-items: center;
-width: 112px;
-height: 31px;
-background: gray;
-border-radius: 5px;
-font-family: 'Lato';
-font-style: normal;
-font-weight: 700;
-font-size: 14px;
-line-height: 17px;
-color: black;
-`

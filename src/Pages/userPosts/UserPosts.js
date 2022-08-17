@@ -26,9 +26,9 @@ console.log(localToken)
         getUserPosts();
     }, []);
     
-   /* useEffect(() => {
+    useEffect(() => {
       getFollowing();
-  }, []); */
+  }, []); 
 
    function addFollow() {
     setLoadFollow(true);
@@ -80,7 +80,7 @@ console.log("chegou aqui")
     .catch(err => {
         console.log(err);
         setLoadFollow(false); 
-        alert("An error occured while trying to fetch the posts, please refresh the page")
+        alert("An error occured while trying unfollow, please refresh the page")
     
     });
    }
@@ -93,7 +93,7 @@ console.log("chegou aqui")
         }
 
         try{
-            const userPosts = await (await axios.get(`https://projeto-linkr-back.herokuapp.com/user/${userId}`, config)).data;
+            const userPosts = await (await axios.get(`http://localhost:4000/user/${userId}`, config)).data;
 
             if(!userPosts){
                 console.log("Problema ao obter trending");
@@ -116,9 +116,12 @@ console.log("chegou aqui")
     } 
       const promise = axios.get(`http://localhost:4000/follow/${profileId}`, config)
       promise
-    .then(res =>{       
+    .then(res =>{  
+      console.log("tá aqui")
+      console.log(profileId) 
+      console.log(follower)    
       console.log(res.data)
-      
+      setFollowing(res.data)
     })
     .catch(err => {
         console.log(err);

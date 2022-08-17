@@ -7,17 +7,22 @@ import axios from "axios";
 
 export default function SearchBar() {
   const navigate = useNavigate();
-
+const localToken = localStorage.getItem("token");
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState([]);
-
+console.log(localToken)
   useEffect(() => {
     if (search.length < 3) {
       setUsers([]);
       return;
     }
-
-    const promise = axios.get(`http://localhost:4000/users/?search=${search}`);
+    
+    const config = {
+      headers: {
+          Authorization: `Bearer ${localToken}`
+      }
+  }
+    const promise = axios.get(`http://localhost:4000/users/?search=${search}`, config);
 
     promise
       .then((res) => {
@@ -48,8 +53,15 @@ export default function SearchBar() {
             }}
             key={index}
           >
+            {(user.followersid === undefined) && (<>
             <img src={user.image} />
-            <p>{user.name}</p>
+            <p>{user.name}</p> 
+            </>)}
+            {(user.followersid !== undefined) && (<>
+            <img src={user.image} />
+            <p>{user.name} (seguindo)</p>
+            </>)}
+            
           </span>
         ))}
       </div>

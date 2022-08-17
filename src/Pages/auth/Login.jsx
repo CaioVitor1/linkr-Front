@@ -44,7 +44,7 @@ export default function Login() {
 
       setDisable(true);
       setLoader(<ThreeDots color="white" />);
-      navigate("/user/:userId");
+      navigate("/timeline");
     } catch (error) {
       console.log(error.response.status);
       setLoader(<ThreeDots color="white" />);

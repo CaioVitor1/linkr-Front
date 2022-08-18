@@ -7,17 +7,23 @@ import axios from "axios";
 
 export default function SearchBar() {
   const navigate = useNavigate();
-
+const localToken = localStorage.getItem("token");
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState([]);
-
+console.log(localToken)
   useEffect(() => {
     if (search.length < 3) {
       setUsers([]);
       return;
     }
 
-    const promise = axios.get(`http://localhost:4000/users/?search=${search}`);
+    
+    const config = {
+      headers: {
+          Authorization: `Bearer ${localToken}`
+      }
+  }
+    const promise = axios.get(`http://localhost:4000/users/?search=${search}`, config);
 
     promise
       .then((res) => {
@@ -48,8 +54,16 @@ export default function SearchBar() {
             }}
             key={index}
           >
+            {(user.followersid === undefined) && (<>
             <img src={user.image} />
-            <p>{user.name}</p>
+            <p>{user.name}</p> 
+            </>)}
+            {(user.followersid !== undefined) && (<>
+            <img src={user.image} />
+            <p>{user.name} </p>
+            <h4> • following</h4>
+            </>)}
+            
           </span>
         ))}
       </div>
@@ -106,6 +120,15 @@ const SearchField = styled.div`
         line-height: 23px;
         color: #515151;
         cursor: pointer;
+      }
+      h4{
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 19px;
+        line-height: 23px;
+        margin-left: 5px;
+        color: #C5C5C5;
       }
       img {
         width: 40px;

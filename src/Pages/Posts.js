@@ -65,6 +65,7 @@ export default function Posts({posts, setPosts, localToken, idUser}) {
               title={data.title}
               likes={data.likes}
               description={data.description}
+              commentsCount={data.commentsCount}
             />
           ))}
         </>

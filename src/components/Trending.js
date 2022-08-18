@@ -12,7 +12,7 @@ export default function Trending(){
     
     useEffect(() => {
         getTrendingData();
-    }, [listTrendingData]);
+    }, []);
 
 
     async function getTrendingData(){
@@ -49,7 +49,7 @@ export default function Trending(){
             <span>trending</span>
             <hr />
             <TrendingRanking>
-                {listTrendingData.map((hashtag, index) => <p onClick={() => clickHashtag(hashtag.hashtag)} key={index}>{hashtag.hashtag}</p>)}
+                {listTrendingData.map((hashtag, index) => <p onClick={() => clickHashtag(hashtag.hashtag)} key={index}># {hashtag.hashtag}</p>)}
             </TrendingRanking>
         </TrendingContainer>
     );

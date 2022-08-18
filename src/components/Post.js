@@ -10,23 +10,11 @@ import heart from "../assets/heart.svg";
 import heartLiked from "../assets/heartLiked.svg";
 import Modal from "react-modal";
 import Tippy from '@tippyjs/react';
-export default function Post({
-    likes,
-    likesCount,
-    posts,
-    name,
-    userId,
-    idUser,
-    url,
-    image,
-    profile,
-    description,
-    comment,
-    title,
-    token,
-    postid,
-    setPosts,
-  }) 
+import comments from "../assets/comments.png"
+import WriteAComment from './WriteAComment';
+import CommentsList from './CommentsList';
+
+export default function Post({likes,likesCount, posts, name, userId, idUser, url,image, profile, description, comment, title, token, postid, setPosts, commentsCount})
 {
       const [modalIsOpen, setIsOpen] = useState(false);
       const [edition, setEdition] = useState(false);
@@ -36,6 +24,7 @@ export default function Post({
      //UserId: Id de quem escreveu o post; idUser: Id do usuário logado
       const [imgheart, setImgheart] = useState(heart);
       const [isliked, setIsliked] = useState(false);
+      const [openComments, setOpenComments] = useState(false);
       const navigate = useNavigate();
 
       function goToUserPage(userId){
@@ -221,9 +210,12 @@ if(likes.length === 0) {
 } else{
   texto = `Curtido por ${likes[0].name} e outras ${likesCount-1} pessoas`
 }
+
         
   
       return (
+        <ListPosts>
+        <PostContainer>
           <PostsBody>
               <Modal
               isOpen={modalIsOpen}
@@ -236,10 +228,7 @@ if(likes.length === 0) {
                           <Back onClick={closeModal}> No, go back</Back>
                           <Confirm onClick={deletePost}> Yes, delete it</Confirm>
                       </ButtonsModal>
-                     
                   </ModalStyle>
-                 
-  
               </Modal>
                      <PostInfo>
                         <Profile src={profile} />
@@ -250,16 +239,18 @@ if(likes.length === 0) {
 
                           {checkLike(likes)}
                        
-                          {(liked === "false") && (<img src={heart} />)}
-                          {(liked === "true") && (<img src={heartLiked} />)}  
-                         
-                      
+                          {(liked === "false") && (<img src={heart} alt=""/>)}
+                          {(liked === "true") && (<img src={heartLiked} alt=""/>)}  
+          
                         </Likess>
                         </Tippy>
-
-  
-  
                         <p>{likesCount} likes</p>
+
+                        <Comments onClick={() => setOpenComments(!openComments)}>
+                          <img src={comments} alt="comments" />  
+                        </Comments>
+                        <p>{commentsCount} comments</p>
+
                       </PostInfo>
                       <PostDescription>
                           <HeaderPost>
@@ -267,8 +258,8 @@ if(likes.length === 0) {
                                   <PostUser onClick={() => goToUserPage(userId)}> {name}</PostUser>
                               </Left>
                               {(idUser === userId) && (<Rigth>
-                                  <img onClick={editPost} src={edit}/>
-                                  <img onClick={openModal} src={trash} />
+                                  <img onClick={editPost} alt="" src={edit}/>
+                                  <img onClick={openModal} alt="" src={trash} />
                               </Rigth>)}
                               
                           </HeaderPost>
@@ -286,13 +277,28 @@ if(likes.length === 0) {
                                   <h4>{url}</h4>
                               </PostContent>
                               <PostImage>
-                                  <img src={image} />
+                                  <img src={image} alt="" />
                               </PostImage>
                           </PostLink>
+                          
                       </PostDescription>
+                     
           </PostsBody>
+          {openComments ? <CommentsList postId={postid}/> : false}
+          {openComments ? <WriteAComment postId={postid} setOpenComments={setOpenComments}/> : false}
+          
+          </PostContainer>
+          </ListPosts>
       );
 }
+
+const ListPosts = styled.div`
+    width: 60%;
+`
+
+const PostContainer = styled.div`
+  margin-bottom: 5vh;
+`
 
 const tagStyle = {
     color: 'white',
@@ -301,12 +307,11 @@ const tagStyle = {
   };
 
 const PostsBody = styled.div`
-  margin-bottom: 20px;
   padding: 20px;
-  width: 60%;
   background: #171717;
   border-radius: 16px;
   display: flex;
+
 `;
 
 const PostDescription = styled.div`
@@ -479,6 +484,7 @@ border-radius: 7px;
 `
 
 const PostInfo = styled.div`
+  width: 18%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -493,6 +499,15 @@ const PostInfo = styled.div`
 `;
 
 const Likess = styled.div`
+  margin-top: 19px;
+  margin-bottom: 10px;
+  img{
+    width: 20px;
+    height: 18px;
+  }
+`;
+
+const Comments = styled.div`
   margin-top: 19px;
   margin-bottom: 10px;
   img{

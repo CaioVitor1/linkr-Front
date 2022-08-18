@@ -59,7 +59,8 @@ console.log(localToken)
             </>)}
             {(user.followersid !== undefined) && (<>
             <img src={user.image} />
-            <p>{user.name} (seguindo)</p>
+            <p>{user.name} </p>
+            <h4> • following</h4>
             </>)}
             
           </span>
@@ -118,6 +119,15 @@ const SearchField = styled.div`
         line-height: 23px;
         color: #515151;
         cursor: pointer;
+      }
+      h4{
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 19px;
+        line-height: 23px;
+        margin-left: 5px;
+        color: #C5C5C5;
       }
       img {
         width: 40px;

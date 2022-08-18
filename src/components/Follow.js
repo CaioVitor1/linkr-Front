@@ -60,12 +60,28 @@ export default function Follow({profileId, follower,loadFollow,  setLoadFollow, 
     return (
         <>
         {(profileId !== follower) && (loadFollow === false) && (following === false) && (<BeginFollow onClick={addFollow}> Follow</BeginFollow>)}
-        {(profileId !== follower) && (loadFollow === false) && (following === true) && (<BeginFollow onClick={removeFollow}> Unfollow</BeginFollow>)}
+        {(profileId !== follower) && (loadFollow === false) && (following === true) && (<BeginUnfollow onClick={removeFollow}> Unfollow</BeginUnfollow>)}
         {(profileId !== follower) && (loadFollow === true) && (following === false) && (<UnFollow> Follow</UnFollow>)}
         {(profileId !== follower) && (loadFollow === true) && (following === true) && (<UnFollow> Unfollow</UnFollow>)}
         </>
     )
 }
+
+const BeginUnfollow = styled.button`
+display: flex;
+justify-content: center;
+align-items: center;
+width: 112px;
+height: 31px;
+background: white;
+border-radius: 5px;
+font-family: 'Lato';
+font-style: normal;
+font-weight: 700;
+font-size: 14px;
+line-height: 17px;
+color: blue;
+`
 
 const BeginFollow = styled.button`
 display: flex;

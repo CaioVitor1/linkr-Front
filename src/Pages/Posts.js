@@ -8,6 +8,7 @@ import Post from '../components/Post.js';
 export default function Posts({posts, setPosts, localToken, idUser}) {
 
     const [loading, setLoading] = useState(false);
+    const [anyFollow, setAnyfollow] = useState([])
     const config = {
         headers: {
             Authorization: `Bearer ${localToken}`
@@ -19,7 +20,9 @@ export default function Posts({posts, setPosts, localToken, idUser}) {
         getPosts();
     }, []);
 
-
+useEffect(() => {
+        getFollow();
+    }, []);
 
     async function getPosts(){
 
@@ -38,12 +41,27 @@ export default function Posts({posts, setPosts, localToken, idUser}) {
         });
 
     }
-
+    async function getFollow() {
+      const promise = axios.get("http://localhost:4000/getFollow", config)
+        promise
+        .then(res =>{
+           setAnyfollow(res.data)
+                    console.log(anyFollow.length) 
+        })
+        .catch(err => {
+            console.log(err);
+            alert("An error occured while trying looging for follows")
+           
+        });
+    }
 
   return (
     <>
-      {loading === false && posts.length === 0 && (
-        <NoPosts>There are no posts Yet</NoPosts>
+      {(loading === false) && (posts.length === 0) && (anyFollow.length === 0) && (
+        <NoPosts>You don't follow anyone yet. Search for new Friends</NoPosts>
+      )}
+      {(loading === false) && (posts.length === 0) && (anyFollow.length !== 0) && (
+        <NoPosts>No posts found from your Friends</NoPosts>
       )}
       {loading === true && <NoPosts>LOADING...</NoPosts>}
       {loading === false && posts.length !== 0 && posts.length !== 0 && (
@@ -78,7 +96,7 @@ const NoPosts = styled.div`
   font-family: "Lato";
   font-style: normal;
   font-weight: 400;
-  font-size: 30px;
+  font-size: 25px;
   line-height: 23px;
   display: flex;
   justify-content: center;

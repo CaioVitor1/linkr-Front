@@ -52,7 +52,9 @@ const CommentData = styled.div`
 `
 
 const Right = styled.div`
-
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 `
 
 const Left = styled.div`

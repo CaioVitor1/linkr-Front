@@ -29,7 +29,7 @@ export default function HashtagPosts(){
         }
 
         try{
-            const userPosts = await (await axios.get(`https://projeto-linkr-back.herokuapp.com/user/${userId}`, config)).data;
+            const userPosts = await (await axios.get(`http://localhost:4000/user/${userId}`, config)).data;
 
             if(!userPosts){
                 console.log("Problema ao obter trending");

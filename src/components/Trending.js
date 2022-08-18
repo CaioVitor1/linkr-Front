@@ -12,7 +12,7 @@ export default function Trending(){
     
     useEffect(() => {
         getTrendingData();
-    }, [listTrendingData]);
+    }, []);
 
 
     async function getTrendingData(){
@@ -24,7 +24,7 @@ export default function Trending(){
         }
 
         try{
-            const trendingData = await (await axios.get('https://projeto-linkr-back.herokuapp.com/trendingRanking', config)).data;
+            const trendingData = await (await axios.get('http://localhost:4000/trendingRanking', config)).data;
 
             if(!trendingData){
                 console.log("Problema ao obter trending");
@@ -49,7 +49,7 @@ export default function Trending(){
             <span>trending</span>
             <hr />
             <TrendingRanking>
-                {listTrendingData.map((hashtag, index) => <p onClick={() => clickHashtag(hashtag.hashtag)} key={index}>{hashtag.hashtag}</p>)}
+                {listTrendingData.map((hashtag, index) => <p onClick={() => clickHashtag(hashtag.hashtag)} key={index}># {hashtag.hashtag}</p>)}
             </TrendingRanking>
         </TrendingContainer>
     );

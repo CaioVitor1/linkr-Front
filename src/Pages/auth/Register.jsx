@@ -39,7 +39,7 @@ export default function Register() {
     };
 
     try {
-      const promise = await axios.post(" https://projeto-linkr-back.herokuapp.com/signup", body);
+      const promise = await axios.post(" http://localhost:4000/signup", body);
       console.log(promise.data);
       setDisable(true);
       setLoader(<ThreeDots color="white" />);

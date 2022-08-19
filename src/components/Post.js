@@ -15,8 +15,8 @@ import WriteAComment from './WriteAComment';
 import CommentsList from './CommentsList';
 import { BiPencil } from 'react-icons/bi'
 import { AiOutlineComment } from 'react-icons/ai'
-import { BiRepost } from 'react-icons/bi'
-export default function Post({likes,likesCount, posts, name, userId, idUser, url,image, profile, description, comment, title, token, postid, setPosts, commentsCount, anyFollow})
+import Shared from './Shared';
+export default function Post({likes,likesCount, repostCount, posts, name, userId, idUser, url,image, profile, description, comment, title, token, postid, setPosts, commentsCount, anyFollow})
 {
       const [modalIsOpen, setIsOpen] = useState(false);
       const [edition, setEdition] = useState(false);
@@ -253,10 +253,9 @@ if(likes.length === 0) {
                           <AiOutlineComment color='white'/>  
                         </Comments>
                         <p>{commentsCount} comments</p>
-                        <Shared>
-                          <BiRepost color='white' size={30}/>
-                          <h4> 0 re-posts</h4>
-                        </Shared>
+
+                        <Shared setPosts={setPosts} postid={postid} idUser={idUser} token={token} repostCount={repostCount}/>
+                  
 
 
                       </PostInfo>
@@ -532,13 +531,3 @@ const Profile = styled.img`
   border-radius: 26.5px;
 `;
 
-const Shared = styled.div`
-margin-top: 15px;
-font-family: 'Lato';
-font-style: normal;
-font-weight: 400;
-font-size: 11px;
-line-height: 13px;
-text-align: center;
-color: #FFFFFF;
-`

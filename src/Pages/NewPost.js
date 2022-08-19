@@ -4,7 +4,7 @@ import axios from 'axios';
 import styled from "styled-components"
 
 
-export default function NewPost({posts, setPosts, localToken, imageProfile}) {
+export default function NewPost({posts, setPosts, localToken, imageProfile,getTrendingData}) {
     const [url, setUrl] = useState("");
     const [comment, setComment] = useState("");
     const [loading, setLoading] = useState(false);
@@ -21,13 +21,15 @@ export default function NewPost({posts, setPosts, localToken, imageProfile}) {
                 Authorization: `Bearer ${localToken}`
             }
         }
+
         const promise = axios.post("http://localhost:4000/newpost", body, config);
         promise
         .then(res =>{
             setLoading(false)
             setUrl("");
             setComment("")
-            updatePosts()
+            updatePosts();
+            getTrendingData();
         })
         .catch(err => {
             setLoading(false)

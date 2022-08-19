@@ -3,9 +3,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Trending(){
+export default function Trending({listTrendingData, setListTrendingData}){
 
-    const [listTrendingData, setListTrendingData] = useState([]);
+    //const [listTrendingData, setListTrendingData] = useState([]);
     const navigate = useNavigate();
     const localToken = localStorage.getItem("token");
 

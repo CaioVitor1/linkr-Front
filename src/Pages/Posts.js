@@ -8,7 +8,8 @@ import Post from '../components/Post.js';
 export default function Posts({posts, setPosts, localToken, idUser}) {
 
     const [loading, setLoading] = useState(false);
-    const [anyFollow, setAnyfollow] = useState([])
+    const [anyFollow, setAnyfollow] = useState([]);
+    
     const config = {
         headers: {
             Authorization: `Bearer ${localToken}`

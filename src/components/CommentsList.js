@@ -4,8 +4,8 @@ import jwt from "jwt-decode";
 import Comment from "./Comment";
 import styled from "styled-components";
 
-export default function CommentsList({postId}){
-    const [commentsList, setCommentsList] = useState([]);
+export default function CommentsList({postId, commentsList, setCommentsList, postUserId, anyFollow}){
+    //const [commentsList, setCommentsList] = useState([]);
     const localToken = localStorage.getItem("token");
     const userData = jwt(localToken);
 
@@ -33,5 +33,5 @@ export default function CommentsList({postId}){
         }
     }
 
-    return(commentsList.map(comment => <><span><Comment comment={comment.comment} userName={comment.name} userImage={comment.image} postId={comment.postId} userId={comment.userId}/></span></>));
+    return(commentsList.map(comment => <><span><Comment anyFollow={anyFollow} postUserId={postUserId} comment={comment.comment} userName={comment.name} userImage={comment.image} postId={comment.postId} userId={comment.userId}/></span></>));
 }

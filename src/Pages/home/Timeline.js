@@ -6,6 +6,8 @@ import Posts from "../Posts";
 import { useState, useEffect } from 'react';
 import Trending from "../../components/Trending";
 import axios from "axios";
+import UserContext from "../../contexts/UserContext";
+import { useContext } from "react";
 
 
 export default function Timeline() {
@@ -13,8 +15,8 @@ export default function Timeline() {
   const userData = jwt(localToken);
   const [posts, setPosts] = useState([]);
   const [listTrendingData, setListTrendingData] = useState([]);
-
-  
+  const { routeName } = useContext(UserContext);
+  console.log(routeName)
   async function getTrendingData(){
 
     const config = {

@@ -13,7 +13,8 @@ import UserPosts from "./Pages/userPosts/UserPosts"
 
 export default function App() {
   const [token, setToken] = useState("");
-  const contextValue = { token, setToken };
+  const [routeName, setRouteName] = useState("timeline")
+  const contextValue = { token, setToken, routeName, setRouteName };
 
   return (
     <>

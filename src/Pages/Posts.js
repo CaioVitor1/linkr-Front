@@ -5,7 +5,7 @@ import styled from "styled-components"
 import Post from '../components/Post.js';
 
 
-export default function Posts({posts, setPosts, localToken, idUser}) {
+export default function Posts({posts, setPosts, localToken, idUser, routeName, setRouteName}) {
 
     const [loading, setLoading] = useState(false);
     const [anyFollow, setAnyfollow] = useState([]);

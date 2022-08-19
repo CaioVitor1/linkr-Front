@@ -7,6 +7,8 @@ import jwt from "jwt-decode";
 import Post from "../../components/Post";
 import Follow  from "../../components/Follow.js";
 import Trending from "../../components/Trending";
+import UserContext from "../../contexts/UserContext";
+import { useContext } from "react";
 
 export default function UserPosts(){
     const { userId } = useParams();
@@ -21,12 +23,13 @@ export default function UserPosts(){
     const [loadFollow, setLoadFollow] = useState(false) 
     const [profile, setProfile] = useState("");
     const [listTrendingData, setListTrendingData] = useState([]);
-
+    const { routeName, setRouteName } = useContext(UserContext);
     useEffect(() => {
         getUserPosts();
         getTrendingData();
         getFollowing();
     }, []);
+
     
 
   async function getTrendingData(){
@@ -70,7 +73,8 @@ export default function UserPosts(){
             if(!userPosts){
                 console.log("Problema ao obter trending");
             }
-
+            setRouteName("");
+            console.log(routeName)
             setUserName(userPosts[0].name);
             setProfile(userPosts[0].profile)
             setListUserPosts([...userPosts]);

@@ -5,24 +5,52 @@ import NewPost from "../NewPost";
 import Posts from "../Posts";
 import { useState, useEffect } from 'react';
 import Trending from "../../components/Trending";
+import axios from "axios";
 
 
 export default function Timeline() {
   const localToken = localStorage.getItem("token");
   const userData = jwt(localToken);
   const [posts, setPosts] = useState([]);
-  console.log(userData.id)
+  const [listTrendingData, setListTrendingData] = useState([]);
+
+  
+  async function getTrendingData(){
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${localToken}`
+        }
+    }
+
+    try{
+        const trendingData = await (await axios.get('http://localhost:4000/trendingRanking', config)).data;
+
+        if(!trendingData){
+            console.log("Problema ao obter trending");
+        }
+
+        console.log("resposta trendingData: " );
+        console.log(trendingData);
+
+        setListTrendingData([...trendingData]);
+
+    }catch(error){
+        console.log(error);
+    }
+}
+
   return (
     <>
       <Header />
       <Container>
       <ContainerPosts>
       <TimelineTitle> <h2> Timeline</h2> </TimelineTitle>
-          <NewPost posts={posts} setPosts={setPosts} localToken={localToken} imageProfile={userData.image}/>
+          <NewPost posts={posts} setPosts={setPosts} localToken={localToken} imageProfile={userData.image} getTrendingData={getTrendingData} />
           <Posts posts={posts} setPosts={setPosts} localToken={localToken} idUser={userData.id}/>
         </ContainerPosts>
         <TrendingContainer>
-            <Trending />
+            <Trending listTrendingData={listTrendingData} setListTrendingData={setListTrendingData}/>
         </TrendingContainer>
       </Container>
     </>

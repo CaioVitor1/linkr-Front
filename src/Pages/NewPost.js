@@ -2,12 +2,20 @@ import { useState, useEffect } from 'react';
 import { ThreeDots } from  'react-loader-spinner';
 import axios from 'axios';
 import styled from "styled-components"
+import useInterval from "use-interval";
 
 
-export default function NewPost({posts, setPosts, localToken, imageProfile,getTrendingData}) {
+
+export default function NewPost({posts, setPosts, localToken, imageProfile,getTrendingData, tokenId}) {
+
     const [url, setUrl] = useState("");
     const [comment, setComment] = useState("");
     const [loading, setLoading] = useState(false);
+    const [qntPosts, setQntPosts] = useState();
+    const [newQntPosts, setNewQntPosts] = useState("");
+    const [newPosts, setNewPosts] = useState(0);
+    const [userPost, setUserPost] = useState("");
+
 
     async function addNewPost() {   
         setLoading(true)
@@ -60,6 +68,55 @@ export default function NewPost({posts, setPosts, localToken, imageProfile,getTr
         })
     }
 
+    //Refresh Timeline
+  useEffect(() => {
+    //pega todos os posts
+    const promise = axios.get("http://localhost:4000/getAllposts");
+    promise
+      .then((res) => {
+        setQntPosts(res.data.length);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  function updateQntPosts() {
+    const promise = axios.get("http://localhost:4000/getAllposts");
+    promise
+      .then((res) => {
+        setQntPosts(res.data.length);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  useInterval(() => {
+    //pega a nova quantidade de posts
+    const promise = axios.get("http://localhost:4000/getAllposts");
+    promise
+        .then((res) => {
+            setUserPost(res.data[0].id);
+            if (userPost === tokenId) {
+              
+            } else {
+                
+                setNewQntPosts(res.data.length);
+          }
+              
+        if (qntPosts < newQntPosts) {
+          setNewPosts(newQntPosts - qntPosts);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+
+  }, 7500);
+
+
     return (
         <>
         <NewPostBody>
@@ -81,6 +138,12 @@ export default function NewPost({posts, setPosts, localToken, imageProfile,getTr
                 
            </InputNewPost> 
         </NewPostBody>
+            
+        {newPosts !== 0 && (
+        <UpdateTimeline onClick={() => window.location.reload()}>
+          {newPosts} new posts, load more!
+        </UpdateTimeline>
+      )}
         </>
     )
 }
@@ -179,3 +242,18 @@ const Desability = styled.button`
         align-self: flex-end;
         margin-top: 5px;
 `
+
+const UpdateTimeline = styled.button`
+  cursor: pointer;
+  width: 60%;
+  height: 61px;
+  background-color: #1877f2;
+  margin-bottom: 17px;
+  border: none;
+  border-radius: 16px;
+
+  font-family: "Lato";
+  font-weight: 400;
+  font-size: 16px;
+  color: #fff;
+`;

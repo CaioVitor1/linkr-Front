@@ -7,6 +7,8 @@ import jwt from "jwt-decode";
 import Post from "../../components/Post";
 import Follow  from "../../components/Follow.js";
 import Trending from "../../components/Trending";
+import UserContext from "../../contexts/UserContext";
+import { useContext } from "react";
 
 export default function UserPosts(){
     const { userId } = useParams();
@@ -21,6 +23,13 @@ export default function UserPosts(){
     const [loadFollow, setLoadFollow] = useState(false) 
     const [profile, setProfile] = useState("");
     const [listTrendingData, setListTrendingData] = useState([]);
+    const { nameRouter, setNameRouter } = useContext(UserContext);
+  useEffect(() => {
+    
+    console.log(nameRouter)
+}, []);
+
+setNameRouter("userPost")
 
     useEffect(() => {
         getUserPosts();

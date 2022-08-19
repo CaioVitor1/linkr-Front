@@ -6,14 +6,15 @@ import Posts from "../Posts";
 import { useState, useEffect } from 'react';
 import Trending from "../../components/Trending";
 import axios from "axios";
-
+import UserContext from "../../contexts/UserContext";
+import { useContext } from "react";
 
 export default function Timeline() {
   const localToken = localStorage.getItem("token");
   const userData = jwt(localToken);
   const [posts, setPosts] = useState([]);
   const [listTrendingData, setListTrendingData] = useState([]);
-
+  
   
   async function getTrendingData(){
 
@@ -24,7 +25,7 @@ export default function Timeline() {
     }
 
     try{
-        const trendingData = await (await axios.get('https://projeto-linkr-back.herokuapp.com/trendingRanking', config)).data;
+        const trendingData = await (await axios.get('http://localhost:4000/trendingRanking', config)).data;
 
         if(!trendingData){
             console.log("Problema ao obter trending");
@@ -46,9 +47,7 @@ export default function Timeline() {
       <Container>
       <ContainerPosts>
       <TimelineTitle> <h2> Timeline</h2> </TimelineTitle>
-
-          <NewPost posts={posts} setPosts={setPosts} localToken={localToken} imageProfile={userData.image} getTrendingData={getTrendingData} tokenId={userData.id } />
-
+          <NewPost posts={posts} setPosts={setPosts} localToken={localToken} imageProfile={userData.image} getTrendingData={getTrendingData} />
           <Posts posts={posts} setPosts={setPosts} localToken={localToken} idUser={userData.id}/>
         </ContainerPosts>
         <TrendingContainer>

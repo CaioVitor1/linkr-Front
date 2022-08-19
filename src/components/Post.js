@@ -16,6 +16,8 @@ import CommentsList from './CommentsList';
 import { BiPencil } from 'react-icons/bi'
 import { AiOutlineComment } from 'react-icons/ai'
 import Shared from './Shared';
+import UserContext from '../contexts/UserContext';
+import { useContext } from "react";
 export default function Post({likes,likesCount, repostCount, posts, name, userId, idUser, url,image, profile, description, comment, title, token, postid, setPosts, commentsCount, anyFollow})
 {
       const [modalIsOpen, setIsOpen] = useState(false);
@@ -29,7 +31,9 @@ export default function Post({likes,likesCount, repostCount, posts, name, userId
       const [openComments, setOpenComments] = useState(false);
       const navigate = useNavigate();
       const [commentsList, setCommentsList] = useState([]);
-
+      const { nameRouter, setNameRouter } = useContext(UserContext);
+      const [listUserPosts, setListUserPosts] = useState([]);
+      
       function goToUserPage(userId){
           navigate(`/user/${userId}`);
       }
@@ -52,20 +56,36 @@ export default function Post({likes,likesCount, repostCount, posts, name, userId
       idUser: idUser,
       postid: postid
     }
-   
-   
+   if(nameRouter == "timeline"){
     const promise = axios.post("https://projeto-linkr-back.herokuapp.com/deletelikes", body, config)
     promise
     .then(res =>{
        
         updatePosts();
-       
+       return 
     })
     .catch(err => {
         console.log(err);
         alert("An error occured while trying to fetch the posts, please refresh the page")
         
     })
+   }
+   if(nameRouter === "userPost"){
+    const promise = axios.post("https://projeto-linkr-back.herokuapp.com/deletelikes", body, config)
+    promise
+    .then(res =>{
+      document.location.reload(true)
+        //getUserPosts();
+       return 
+    })
+    .catch(err => {
+        console.log(err);
+        alert("An error occured while trying to fetch the posts, please refresh the page")
+        
+    })
+   }
+   
+    
     }
   
     function addLike() {
@@ -75,18 +95,37 @@ export default function Post({likes,likesCount, repostCount, posts, name, userId
       postid: postid
     }
    
-    const promise = axios.post("https://projeto-linkr-back.herokuapp.com/addlikes", body, config)
+    if(nameRouter === "timeline") {
+      const promise = axios.post("https://projeto-linkr-back.herokuapp.com/addlikes", body, config)
     promise
     .then(res =>{
         
         updatePosts()
-       
+       return
     })
     .catch(err => {
         console.log(err);
         alert("An error occured while trying to fetch the posts, please refresh the page")
         
     })
+    }
+    if(nameRouter === "userPost") {
+      const promise = axios.post("https://projeto-linkr-back.herokuapp.com/addlikes", body, config)
+    promise
+    .then(res =>{
+      document.location.reload(true)
+        //getUserPosts()
+       return
+    })
+    .catch(err => {
+        console.log(err);
+        alert("An error occured while trying to fetch the posts, please refresh the page")
+        
+    })
+    }
+
+
+    
     }
   
       function toggleLike() {
@@ -145,7 +184,8 @@ export default function Post({likes,likesCount, repostCount, posts, name, userId
           const promise = axios.delete(`https://projeto-linkr-back.herokuapp.com/deletepost/${postid}`, config);
           promise
           .then(res =>{
-              updatePosts()
+              document.location.reload(true)
+            
               setIsOpen(false)
           })
           .catch(err => {
@@ -172,8 +212,15 @@ export default function Post({likes,likesCount, repostCount, posts, name, userId
               promise
               .then(res =>{
                   setLoadingEdit(false)
-                  updatePosts()
                   setEdition(false)
+                  if(nameRouter === "timeline") {
+                    updatePosts()
+                    return
+                  } else {
+                    document.location.reload(true)
+                  }
+                  
+                  
                   
                  
                  
@@ -212,6 +259,24 @@ if(likes.length === 0) {
   texto = "Ninguém curtiu esse post"
 } else{
   texto = `Curtido por ${likes[0].name} e outras ${likesCount-1} pessoas`
+}
+
+async function getUserPosts(){
+  const config = {
+      headers: {
+          Authorization: `Bearer ${token}`
+      }
+  }
+
+  try{
+      const userPosts = await (await axios.get(`https://projeto-linkr-back.herokuapp.com/user/${userId}`, config)).data;
+      if(!userPosts){
+          console.log("Problema ao obter trending");
+      }
+      setListUserPosts([...userPosts]);
+  }catch(error){
+      console.log(error);
+  }
 }
 
         

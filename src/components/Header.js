@@ -5,10 +5,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import jwt from "jwt-decode";
 import SearchBar from "./SearchBar";
+import UserContext from "../contexts/UserContext";
+import { useContext } from "react";
 
 export default function Header() {
   const navigate = useNavigate();
-
+  const { nameRouter, setNameRouter } = useContext(UserContext);
   const [isOpen, setIsOpen] = useState(vector);
   const [classMenu, setClassMenu] = useState("menu");
 
@@ -20,9 +22,15 @@ export default function Header() {
     setClassMenu(classMenu === "menu" ? "open-menu" : "menu");
   };
 
+function returnTimeline() {
+  setNameRouter("timeline")
+  console.log(nameRouter)
+  navigate("/timeline")
+}
+
   return (
     <HeaderProfile>
-      <h1 onClick={() => navigate("/timeline")}>Linkr</h1>
+      <h1 onClick={returnTimeline}>Linkr</h1>
       <SearchBar />
       <Logout>
         <img

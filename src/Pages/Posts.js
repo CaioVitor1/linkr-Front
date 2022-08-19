@@ -82,6 +82,7 @@ export default function Posts({posts, setPosts, localToken, idUser}) {
               description={data.description}
               commentsCount={data.commentsCount}
               anyFollow={anyFollow}
+              repostCount={data.repostCount}
             />
           ))}
         </>

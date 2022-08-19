@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export default function Comment({comment, userName, userImage, postId, userId}){
+export default function Comment({comment, userName, userImage, postId, userId, postUserId, anyFollow}){
 
 
     return(
@@ -10,14 +10,10 @@ export default function Comment({comment, userName, userImage, postId, userId}){
                 <img src={userImage} alt="" />
             </Left>
             <Right>
-            <UserName>{userName}</UserName>
+            <UserName>{userName} {userId === postUserId ? <span>&nbsp;• posts's author</span> : false} {anyFollow.some(follower => follower.profileId === userId) ? <span>&nbsp;• following</span> : false}</UserName>
             <CommentDescr>{comment}</CommentDescr>
             
             </Right>
-            
-            
-            
-            
         </CommentData>
         <CommentHr />
         </CommentContainer>
@@ -79,6 +75,15 @@ const UserName = styled.div`
     font-size: 14px;
     line-height: 17px;
     color: #F3F3F3;
+
+    span{
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 17px;
+        color: #565656;
+    }
 `
 
 const CommentDescr = styled.div`

@@ -14,7 +14,7 @@ import comments from "../assets/comments.png"
 import WriteAComment from './WriteAComment';
 import CommentsList from './CommentsList';
 
-export default function Post({likes,likesCount, posts, name, userId, idUser, url,image, profile, description, comment, title, token, postid, setPosts, commentsCount})
+export default function Post({likes,likesCount, posts, name, userId, idUser, url,image, profile, description, comment, title, token, postid, setPosts, commentsCount, anyFollow})
 {
       const [modalIsOpen, setIsOpen] = useState(false);
       const [edition, setEdition] = useState(false);
@@ -26,6 +26,7 @@ export default function Post({likes,likesCount, posts, name, userId, idUser, url
       const [isliked, setIsliked] = useState(false);
       const [openComments, setOpenComments] = useState(false);
       const navigate = useNavigate();
+      const [commentsList, setCommentsList] = useState([]);
 
       function goToUserPage(userId){
           navigate(`/user/${userId}`);
@@ -55,7 +56,7 @@ export default function Post({likes,likesCount, posts, name, userId, idUser, url
     promise
     .then(res =>{
        
-        updatePosts()
+        updatePosts();
        
     })
     .catch(err => {
@@ -284,8 +285,8 @@ if(likes.length === 0) {
                       </PostDescription>
                      
           </PostsBody>
-          {openComments ? <CommentsList postId={postid}/> : false}
-          {openComments ? <WriteAComment postId={postid} setOpenComments={setOpenComments}/> : false}
+          {openComments ? <CommentsList anyFollow={anyFollow} postUserId={userId} commentsList={commentsList} setCommentsList={setCommentsList} postId={postid}/> : false}
+          {openComments ? <WriteAComment commentsList={commentsList} setCommentsList={setCommentsList} postId={postid} setOpenComments={setOpenComments}/> : false}
           
           </PostContainer>
           </ListPosts>

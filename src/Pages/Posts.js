@@ -18,41 +18,37 @@ export default function Posts({posts, setPosts, localToken, idUser}) {
     useEffect(() => {
         setLoading(true);
         getPosts();
-    }, []);
-
-useEffect(() => {
         getFollow();
     }, []);
 
+
     async function getPosts(){
 
-            
-        const promise = axios.get("http://localhost:4000/getposts", config)
-        promise
-        .then(res =>{
-           
-            setPosts(res.data);
-            setLoading(false);         
-        })
-        .catch(err => {
-            console.log(err);
-            alert("An error occured while trying to fetch the posts, please refresh the page")
-            setLoading(false);
-        });
+      try{
+        const posts = await (await axios.get("http://localhost:4000/getposts", config)).data;
 
+        console.log(posts);
+
+        setPosts(posts);
+        setLoading(false);
+      }catch(error){
+        console.log(error);
+        alert("An error occured while trying to fetch the posts, please refresh the page")
+        setLoading(false);
+      }
+        
     }
     async function getFollow() {
-      const promise = axios.get("http://localhost:4000/getFollow", config)
-        promise
-        .then(res =>{
-           setAnyfollow(res.data)
-                    console.log(anyFollow.length) 
-        })
-        .catch(err => {
-            console.log(err);
-            alert("An error occured while trying looging for follows")
-           
-        });
+      try{
+        const followers = (await axios.get("http://localhost:4000/getFollow", config)).data;
+        console.log("followers: ");
+        console.log(followers);
+              
+        setAnyfollow(followers);
+      }catch(error){
+        console.log(error);
+        alert("An error occured while trying looging for follows");
+      }
     }
 
   return (
@@ -84,6 +80,7 @@ useEffect(() => {
               likes={data.likes}
               description={data.description}
               commentsCount={data.commentsCount}
+              anyFollow={anyFollow}
             />
           ))}
         </>

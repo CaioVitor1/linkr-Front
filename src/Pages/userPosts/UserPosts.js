@@ -113,6 +113,7 @@ export default function HashtagPosts(){
                 title={data.title}
                 likes={data.likes}
                 description={data.description}
+                commentsCount={data.commentsCount}
               />
             ))}
           </>

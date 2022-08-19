@@ -4,7 +4,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import send from "../assets/send.png"
 
-export default function WriteAComment({postId, setOpenComments}){
+export default function WriteAComment({postId, commentsList, setCommentsList}){
     const localToken = localStorage.getItem("token");
     const userData = jwt(localToken);
     const [commentData, setCommentData] = useState("");
@@ -24,19 +24,30 @@ export default function WriteAComment({postId, setOpenComments}){
             console.log(error);
         }
 
+        await getCommentListData();
         setCommentData("");
       }
 
-      async function pressEnter(e){
+    async function pressEnter(e){
         if(e.key === "Enter") {
         //console.log("postId: " + postId);
         //console.log(e);
 
         await commentPost();
+        await getCommentListData();
+        }
     }
 
+    async function getCommentListData(){
 
-}
+        try{
+            const listCommentsData = await (await axios.get(`http://localhost:4000/listComments/${postId}`, config)).data;
+
+            setCommentsList([...listCommentsData]);
+        }catch(error){
+            console.log(error);
+        }
+    }
             
 
     return(

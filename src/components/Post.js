@@ -3,7 +3,7 @@ import axios from 'axios';
 import styled from "styled-components"
 import { useNavigate } from 'react-router-dom';
 import { ReactTagify } from "react-tagify";
-import {pencil} from 'react-icons/fa'
+import { BiTrash } from 'react-icons/bi'
 import trash from "../assets/trash.png";
 import edit from "../assets/edit.png";
 import heart from "../assets/heart.svg";
@@ -13,8 +13,10 @@ import Tippy from '@tippyjs/react';
 import comments from "../assets/comments.png"
 import WriteAComment from './WriteAComment';
 import CommentsList from './CommentsList';
-
-export default function Post({likes,likesCount, posts, name, userId, idUser, url,image, profile, description, comment, title, token, postid, setPosts, commentsCount})
+import { BiPencil } from 'react-icons/bi'
+import { AiOutlineComment } from 'react-icons/ai'
+import Shared from './Shared';
+export default function Post({likes,likesCount, repostCount, posts, name, userId, idUser, url,image, profile, description, comment, title, token, postid, setPosts, commentsCount, anyFollow})
 {
       const [modalIsOpen, setIsOpen] = useState(false);
       const [edition, setEdition] = useState(false);
@@ -26,6 +28,7 @@ export default function Post({likes,likesCount, posts, name, userId, idUser, url
       const [isliked, setIsliked] = useState(false);
       const [openComments, setOpenComments] = useState(false);
       const navigate = useNavigate();
+      const [commentsList, setCommentsList] = useState([]);
 
       function goToUserPage(userId){
           navigate(`/user/${userId}`);
@@ -55,7 +58,7 @@ export default function Post({likes,likesCount, posts, name, userId, idUser, url
     promise
     .then(res =>{
        
-        updatePosts()
+        updatePosts();
        
     })
     .catch(err => {
@@ -247,9 +250,13 @@ if(likes.length === 0) {
                         <p>{likesCount} likes</p>
 
                         <Comments onClick={() => setOpenComments(!openComments)}>
-                          <img src={comments} alt="comments" />  
+                          <AiOutlineComment color='white'/>  
                         </Comments>
                         <p>{commentsCount} comments</p>
+
+                        <Shared setPosts={setPosts} postid={postid} idUser={idUser} token={token} repostCount={repostCount}/>
+                  
+
 
                       </PostInfo>
                       <PostDescription>
@@ -258,8 +265,8 @@ if(likes.length === 0) {
                                   <PostUser onClick={() => goToUserPage(userId)}> {name}</PostUser>
                               </Left>
                               {(idUser === userId) && (<Rigth>
-                                  <img onClick={editPost} alt="" src={edit}/>
-                                  <img onClick={openModal} alt="" src={trash} />
+                                  <BiPencil color='white' onClick={editPost} />
+                                  <BiTrash color='white' onClick={openModal} />
                               </Rigth>)}
                               
                           </HeaderPost>
@@ -284,8 +291,8 @@ if(likes.length === 0) {
                       </PostDescription>
                      
           </PostsBody>
-          {openComments ? <CommentsList postId={postid}/> : false}
-          {openComments ? <WriteAComment postId={postid} setOpenComments={setOpenComments}/> : false}
+          {openComments ? <CommentsList anyFollow={anyFollow} postUserId={userId} commentsList={commentsList} setCommentsList={setCommentsList} postId={postid}/> : false}
+          {openComments ? <WriteAComment commentsList={commentsList} setCommentsList={setCommentsList} postId={postid} setOpenComments={setOpenComments}/> : false}
           
           </PostContainer>
           </ListPosts>
@@ -403,8 +410,9 @@ const Left = styled.div``;
 
 const Rigth = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  width: 40px;
   img {
     margin-right: 10px;
     width: 15px;

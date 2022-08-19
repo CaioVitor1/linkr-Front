@@ -5,7 +5,9 @@ import styled from "styled-components"
 import useInterval from "use-interval";
 
 
-export default function NewPost({posts, setPosts, localToken, imageProfile, tokenId}) {
+
+export default function NewPost({posts, setPosts, localToken, imageProfile,getTrendingData, tokenId}) {
+
     const [url, setUrl] = useState("");
     const [comment, setComment] = useState("");
     const [loading, setLoading] = useState(false);
@@ -27,13 +29,15 @@ export default function NewPost({posts, setPosts, localToken, imageProfile, toke
                 Authorization: `Bearer ${localToken}`
             }
         }
+
         const promise = axios.post("http://localhost:4000/newpost", body, config);
         promise
         .then(res =>{
             setLoading(false)
             setUrl("");
             setComment("")
-            updatePosts()
+            updatePosts();
+            getTrendingData();
         })
         .catch(err => {
             setLoading(false)

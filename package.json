@@ -17,7 +17,8 @@
     "react-select-search": "^3.0.10",
     "react-tagify": "^0.1.4",
     "styled-components": "^5.3.5",
-    "url-metadata": "^2.5.0"
+    "url-metadata": "^2.5.0",
+    "use-interval": "^1.4.0"
   },
   "scripts": {
     "start": "react-scripts start",

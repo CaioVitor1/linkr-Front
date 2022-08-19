@@ -38,14 +38,14 @@ export default function UserPosts(){
     }
 
     try{
-        const trendingData = await (await axios.get('http://localhost:4000/trendingRanking', config)).data;
+        const trendingData = await (await axios.get('https://projeto-linkr-back.herokuapp.com/trendingRanking', config)).data;
 
         if(!trendingData){
             console.log("Problema ao obter trending");
         }
 
-        console.log("resposta trendingData: " );
-        console.log(trendingData);
+      
+       
 
         setListTrendingData([...trendingData]);
 
@@ -62,10 +62,10 @@ export default function UserPosts(){
         }
 
         try{
-            const userPosts = await (await axios.get(`http://localhost:4000/user/${userId}`, config)).data;
+            const userPosts = await (await axios.get(`https://projeto-linkr-back.herokuapp.com/user/${userId}`, config)).data;
 
-            console.log("resposta userPosts: ");
-            console.log(userPosts);
+            
+           
 
             if(!userPosts){
                 console.log("Problema ao obter trending");
@@ -85,10 +85,10 @@ export default function UserPosts(){
             Authorization: `Bearer ${localToken}`
         }
     } 
-      const promise = axios.get(`http://localhost:4000/follow/${profileId}`, config)
+      const promise = axios.get(`https://projeto-linkr-back.herokuapp.com/follow/${profileId}`, config)
       promise
     .then(res =>{  
-      console.log("tá aqui")
+    
       setFollowing(res.data)
     })
     .catch(err => {
@@ -97,7 +97,7 @@ export default function UserPosts(){
     
     });
     }
-console.log("aqui")
+
     return(
         <>
         <Header />

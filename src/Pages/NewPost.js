@@ -30,7 +30,7 @@ export default function NewPost({posts, setPosts, localToken, imageProfile,getTr
             }
         }
 
-        const promise = axios.post("http://localhost:4000/newpost", body, config);
+        const promise = axios.post("https://projeto-linkr-back.herokuapp.com/newpost", body, config);
         promise
         .then(res =>{
             setLoading(false)
@@ -53,7 +53,7 @@ export default function NewPost({posts, setPosts, localToken, imageProfile,getTr
                 Authorization: `Bearer ${localToken}`
             }
         }
-        const promise = axios.get("http://localhost:4000/getposts", config)
+        const promise = axios.get("https://projeto-linkr-back.herokuapp.com/getposts", config)
         promise
         .then(res =>{
             setPosts(res.data)
@@ -71,7 +71,7 @@ export default function NewPost({posts, setPosts, localToken, imageProfile,getTr
     //Refresh Timeline
   useEffect(() => {
     //pega todos os posts
-    const promise = axios.get("http://localhost:4000/getAllposts");
+    const promise = axios.get("https://projeto-linkr-back.herokuapp.com/getAllposts");
     promise
       .then((res) => {
         setQntPosts(res.data.length);
@@ -82,7 +82,7 @@ export default function NewPost({posts, setPosts, localToken, imageProfile,getTr
   }, []);
 
   function updateQntPosts() {
-    const promise = axios.get("http://localhost:4000/getAllposts");
+    const promise = axios.get("https://projeto-linkr-back.herokuapp.com/getAllposts");
     promise
       .then((res) => {
         setQntPosts(res.data.length);
@@ -94,7 +94,7 @@ export default function NewPost({posts, setPosts, localToken, imageProfile,getTr
 
   useInterval(() => {
     //pega a nova quantidade de posts
-    const promise = axios.get("http://localhost:4000/getAllposts");
+    const promise = axios.get("https://projeto-linkr-back.herokuapp.com/getAllposts");
     promise
         .then((res) => {
             setUserPost(res.data[0].id);

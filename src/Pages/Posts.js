@@ -26,9 +26,9 @@ export default function Posts({posts, setPosts, localToken, idUser}) {
     async function getPosts(){
 
       try{
-        const posts = await (await axios.get("http://localhost:4000/getposts", config)).data;
+        const posts = await (await axios.get("https://projeto-linkr-back.herokuapp.com/getposts", config)).data;
 
-        console.log(posts);
+       
 
         setPosts(posts);
         setLoading(false);
@@ -41,9 +41,8 @@ export default function Posts({posts, setPosts, localToken, idUser}) {
     }
     async function getFollow() {
       try{
-        const followers = (await axios.get("http://localhost:4000/getFollow", config)).data;
-        console.log("followers: ");
-        console.log(followers);
+        const followers = (await axios.get("https://projeto-linkr-back.herokuapp.com/getFollow", config)).data;
+       
               
         setAnyfollow(followers);
       }catch(error){

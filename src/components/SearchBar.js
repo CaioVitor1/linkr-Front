@@ -10,7 +10,7 @@ export default function SearchBar() {
 const localToken = localStorage.getItem("token");
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState([]);
-console.log(localToken)
+
   useEffect(() => {
     if (search.length < 3) {
       setUsers([]);
@@ -23,11 +23,11 @@ console.log(localToken)
           Authorization: `Bearer ${localToken}`
       }
   }
-    const promise = axios.get(`http://localhost:4000/users/?search=${search}`, config);
+    const promise = axios.get(`https://projeto-linkr-back.herokuapp.com/users/?search=${search}`, config);
 
     promise
       .then((res) => {
-        console.log(res.data);
+       
         setUsers(res.data);
       })
       .catch((err) => {

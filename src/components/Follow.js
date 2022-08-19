@@ -16,7 +16,7 @@ export default function Follow({profileId, follower,loadFollow,  setLoadFollow, 
           }
       }
       console.log(body)
-        const promise = axios.post("http://localhost:4000/follow", body, config)
+        const promise = axios.post("https://projeto-linkr-back.herokuapp.com/follow", body, config)
         promise
         .then(res =>{       
           console.log("chegou aqui")
@@ -43,7 +43,7 @@ export default function Follow({profileId, follower,loadFollow,  setLoadFollow, 
           }
       }
     
-        const promise = axios.delete(`http://localhost:4000/follow/${profileId}`, config)
+        const promise = axios.delete(`https://projeto-linkr-back.herokuapp.com/follow/${profileId}`, config)
         promise
         .then(res =>{       
           console.log(res.data)

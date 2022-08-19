@@ -19,7 +19,7 @@ export default function WriteAComment({postId, commentsList, setCommentsList}){
         const body = { comment: commentData, postId, userId: userData.id };
 
         try{
-            await axios.post(`http://localhost:4000/addComment`, body, config);
+            await axios.post(`https://projeto-linkr-back.herokuapp.com/addComment`, body, config);
         }catch(error){
             console.log(error);
         }
@@ -41,7 +41,7 @@ export default function WriteAComment({postId, commentsList, setCommentsList}){
     async function getCommentListData(){
 
         try{
-            const listCommentsData = await (await axios.get(`http://localhost:4000/listComments/${postId}`, config)).data;
+            const listCommentsData = await (await axios.get(`https://projeto-linkr-back.herokuapp.com/listComments/${postId}`, config)).data;
 
             setCommentsList([...listCommentsData]);
         }catch(error){

@@ -25,7 +25,7 @@ export default function Shared({postid, idUser, token, repostCount, setPosts}) {
                 Authorization: `Bearer ${token}`
             }
         }
-        const promise = axios.post(`http://localhost:4000/repost`, body, config);
+        const promise = axios.post(`https://projeto-linkr-back.herokuapp.com/repost`, body, config);
           promise
           .then(res =>{
               updatePosts()
@@ -45,7 +45,7 @@ export default function Shared({postid, idUser, token, repostCount, setPosts}) {
                 Authorization: `Bearer ${token}`
             }
         }
-        const promise = axios.get("http://localhost:4000/getposts", config)
+        const promise = axios.get("https://projeto-linkr-back.herokuapp.com/getposts", config)
         promise
         .then(res =>{
             setPosts(res.data)

@@ -23,7 +23,7 @@ export default function CommentsList({postId, commentsList, setCommentsList, pos
     async function getCommentListData(){
 
         try{
-            const listCommentsData = await (await axios.get(`http://localhost:4000/listComments/${postId}`, config)).data;
+            const listCommentsData = await (await axios.get(`https://projeto-linkr-back.herokuapp.com/listComments/${postId}`, config)).data;
 
             console.log(listCommentsData);
 

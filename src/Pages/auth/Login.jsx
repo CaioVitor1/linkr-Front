@@ -37,7 +37,7 @@ export default function Login() {
     };
 
     try {
-      const promise = await axios.post("http://localhost:4000/signin", body);
+      const promise = await axios.post("https://projeto-linkr-back.herokuapp.com/signin", body);
       console.log(promise.data);
       setToken(promise.data.token);
       localStorage.setItem("token", promise.data.token);

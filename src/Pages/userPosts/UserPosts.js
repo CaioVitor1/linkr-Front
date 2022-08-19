@@ -8,7 +8,7 @@ import Post from "../../components/Post";
 import Follow  from "../../components/Follow.js";
 import Trending from "../../components/Trending";
 
-export default function HashtagPosts(){
+export default function UserPosts(){
     const { userId } = useParams();
     const [listUserPosts, setListUserPosts] = useState([]);
     const [userName, setUserName] = useState("");
@@ -19,14 +19,40 @@ export default function HashtagPosts(){
     const profileId = parseInt(userId) 
     const [following, setFollowing] = useState(false) //diz se os usuários já se seguem
     const [loadFollow, setLoadFollow] = useState(false) 
-    const [profile, setProfile] = useState("")
+    const [profile, setProfile] = useState("");
+    const [listTrendingData, setListTrendingData] = useState([]);
+
     useEffect(() => {
         getUserPosts();
+        getTrendingData();
+        getFollowing();
     }, []);
     
-    useEffect(() => {
-      getFollowing();
-  }, []); 
+
+  async function getTrendingData(){
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${localToken}`
+        }
+    }
+
+    try{
+        const trendingData = await (await axios.get('http://localhost:4000/trendingRanking', config)).data;
+
+        if(!trendingData){
+            console.log("Problema ao obter trending");
+        }
+
+        console.log("resposta trendingData: " );
+        console.log(trendingData);
+
+        setListTrendingData([...trendingData]);
+
+    }catch(error){
+        console.log(error);
+    }
+}
 
     async function getUserPosts(){
         const config = {
@@ -37,6 +63,9 @@ export default function HashtagPosts(){
 
         try{
             const userPosts = await (await axios.get(`http://localhost:4000/user/${userId}`, config)).data;
+
+            console.log("resposta userPosts: ");
+            console.log(userPosts);
 
             if(!userPosts){
                 console.log("Problema ao obter trending");
@@ -123,7 +152,7 @@ console.log("aqui")
         )}
     </ContainerHashtagPosts>
     <TrendStyle>
-      <Trending width='50px' />
+      <Trending listTrendingData={listTrendingData} setListTrendingData={setListTrendingData} width='50px' />
     </TrendStyle>
     
     </Teste>
